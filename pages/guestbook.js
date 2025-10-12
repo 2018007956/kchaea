@@ -34,23 +34,23 @@ export default function GuestbookPage({ fallbackData }) {
   )
 }
 export async function getStaticProps() {
-  const entries = await prisma.guestbook.findMany({
-    orderBy: {
-      updated_at: 'desc',
-    },
-  })
-
-  const fallbackData = entries.map((entry) => ({
-    id: entry.id.toString(),
-    body: entry.body,
-    created_by: entry.created_by.toString(),
-    updated_at: entry.updated_at.toString(),
-  }))
-
-  return {
-    props: {
-      fallbackData,
-    },
-    revalidate: 60,
+  // Prisma 연결 실패 시에도 빌드가 멈추지 않도록 try/catch 처리
+  try {
+    const entries = await prisma.guestbook.findMany({
+      orderBy: { updated_at: 'desc' },
+    })
+    const safe = entries.map((e) => ({ ...e, id: e.id.toString() }))
+    return {
+      props: { fallbackData: safe },
+      // revalidate 0은 사실상 SSR처럼 동작 (매 요청마다 새 데이터)
+      revalidate: 0,
+    }
+  } catch (e) {
+    console.error('DB connection failed during build:', e)
+    // DB 접속 실패 시 빌드가 죽지 않도록 기본 props 리턴
+    return {
+      props: { fallbackData: [] },
+      revalidate: 10,
+    }
   }
 }
