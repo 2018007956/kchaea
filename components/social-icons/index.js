@@ -13,7 +13,6 @@ const components = {
   github: AiOutlineGithub,
   facebook: AiOutlineFacebook,
   linkedin: FaLinkedinIn,
-  twitter: AiOutlineTwitter,
   website: AiOutlineGlobal,
   external: FiExternalLink,
 }
