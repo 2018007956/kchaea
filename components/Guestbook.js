@@ -95,11 +95,6 @@ export default function Guestbook({ fallbackData }) {
   return (
     <>
       <div className="my-2 w-full rounded-md border border-gray-200 bg-white px-6 py-2 shadow-xl shadow-gray-400 dark:border-zinc-900 dark:bg-zinc-900 dark:shadow-none">
-        <div className="grid items-center justify-center">
-          <h5 className="mt-2 text-lg font-normal text-gray-900 dark:text-gray-100 md:text-lg">
-            Sign the Guestbook
-          </h5>
-        </div>
         {!session && (
           <div className="flex flex-row">
             <a

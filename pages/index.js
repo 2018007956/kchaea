@@ -23,16 +23,21 @@ export default function Home({ posts }) {
       <div>
         <div className="mb-12 flex flex-col items-center gap-x-12 xl:flex-row">
           <div className="pt-6">
-            <h1 className="pb-6 text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
-              Hi, I am{' '}
-              <span className="text-primary-color-500 dark:text-primary-color-dark-500">Parth</span>
+            <h1 className="pb-6 text-2xl font-extrabold leading-10 tracking-tight text-gray-900 dark:text-gray-100 sm:text-3xl sm:leading-12 md:text-4xl md:leading-14">
+              안녕하세요,
+              <br />
+              <span className="text-primary-color-500 dark:text-primary-color-dark-500">
+                탐구하는 개발자
+              </span>{' '}
+              김채아입니다
             </h1>
-            <h2 className="prose pt-5 text-lg text-gray-600 dark:text-gray-300">
-              {`Welcome to ${siteMetadata.description}. I am a Data Engineer who is passionate about Data Science and Automation. In my free time, I like developing `}
-              side projects and learning new technologies.
+            <h2 className="prose pt-5 text-base text-gray-600 dark:text-gray-300">
+              {`저의 개인 블로그에 오신 것을 환영합니다. 저는 자동화를 통해 효율적인 시스템을 구축하는 일에 관심이 있으며, 클라우드 기술에 지속적인 관심을 가지고 있습니다. `}
+              여가 시간에는 AI 기술을 활용해 아이디어를 빠르게 서비스로 구현하는 사이드 프로젝트를
+              즐깁니다.
             </h2>
-            <p className="pt-5 text-lg leading-7 text-slate-600 dark:text-slate-300 sm:block md:hidden lg:hidden">
-              This is my place for{' '}
+            <p className="prosept-5 text-base leading-7 text-slate-600 dark:text-slate-300 sm:block md:hidden lg:hidden">
+              이곳은{' '}
               <RoughNotation
                 animate="true"
                 type="box"
@@ -42,12 +47,12 @@ export default function Home({ posts }) {
                 animationDuration={2500}
                 className="text-slate-200"
               >
-                thoughts, reflections & everything&nbsp;
+                제가 쌓아온 기술과 경험, 그리고 그 과정에서 얻은 인사이트&nbsp;
               </RoughNotation>
-              in between. Have a good read!
+              를 담은 공간입니다. 편하게 둘러보세요!{' '}
             </p>
-            <p className="hidden pt-10 text-lg leading-7 text-slate-600 dark:text-slate-300 md:block">
-              This is my place for{' '}
+            <p className="prose hidden pt-10 text-base leading-7 text-slate-600 dark:text-slate-300 md:block">
+              이곳은{' '}
               <RoughNotation
                 animate="true"
                 type="highlight"
@@ -57,9 +62,9 @@ export default function Home({ posts }) {
                 animationDuration={2500}
                 className="text-slate-200"
               >
-                thoughts, reflections & everything&nbsp;
+                제가 쌓아온 기술과 경험, 그리고 그 과정에서 얻은 인사이트&nbsp;
               </RoughNotation>
-              in between. Have a good read!{' '}
+              를 담은 공간입니다. 편하게 둘러보세요!{' '}
               <div className="mt-8 text-slate-600 dark:text-slate-400">
                 <span className="text-sm">Press</span>{' '}
                 <span className="rounded-md bg-gray-300 p-1 text-sm text-gray-900 dark:bg-gray-400">

@@ -1,12 +1,12 @@
 ---
-name: Parth Desai
+name: Chaea Kim
 avatar: /static/images/avatar.png
-occupation: Data Engineer
-company: Accenture
-email: desaiparth2000@gmail.com
-linkedin: https://www.linkedin.com/in/parth-desai-2bb1b0160/
-github: https://github.com/pycoder2000
-text1: I am an India based Data Engineer with a bachelors in Computer Science. I am passionate about Data Science and Automation. I am also fascinated with Mathematics and wish to make a career out of it someday.
+occupation: XXX Engineer
+company: XXX
+email: chaea11s0@gmail.com
+linkedin: https://www.linkedin.com/in/kchaea/
+github: https://github.com/2018007956
+text1: 저는 컴퓨터소프트웨어를 전공한 개발자입니다. 자동화 기술과 클라우드 플랫폼에 관심이 있으며,
 text2:
 text3:
 ---
