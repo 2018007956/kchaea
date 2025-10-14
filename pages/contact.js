@@ -17,7 +17,7 @@ const Contact = () => {
             <ContactLink
               href="https://www.linkedin.com/in/kchaea/"
               title="linkedin"
-              icon="parthdesai"
+              icon="kchaea"
             />
           </ul>
         </div>

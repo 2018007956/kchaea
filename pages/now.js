@@ -107,22 +107,6 @@ export default function Now(currentlyReading) {
     days: ParthDay,
   }
 
-  var ageString = ''
-  if (age.years > 0 && age.months > 0 && age.days > 0)
-    ageString = age.years + ' years, ' + age.months + ' months, and ' + age.days + ' days old'
-  else if (age.years == 0 && age.months == 0 && age.days > 0)
-    ageString = 'Only ' + age.days + ' days old'
-  else if (age.years > 0 && age.months == 0 && age.days == 0)
-    ageString = age.years + ' years old. Happy Birthday!!'
-  else if (age.years > 0 && age.months > 0 && age.days == 0)
-    ageString = age.years + ' years and ' + age.months + ' months old'
-  else if (age.years == 0 && age.months > 0 && age.days > 0)
-    ageString = age.months + ' months and ' + age.days + ' days old'
-  else if (age.years > 0 && age.months == 0 && age.days > 0)
-    ageString = age.years + ' years, and' + age.days + ' days old'
-  else if (age.years == 0 && age.months > 0 && age.days == 0) ageString = age.months + ' months old'
-  else ageString = "Welcome to Earth! <br> It's first day on Earth!"
-
   return (
     <>
       <PageSEO
@@ -132,7 +116,7 @@ export default function Now(currentlyReading) {
       />
       <div>
         <div className="my-2">
-          <h3>Where am I and what am I doing?</h3>
+          <h3>My current status</h3>
           <div className=" mt-4 mb-6 text-xs text-neutral-700 dark:text-neutral-400">
             This page was automatically updated @ {date}-{month}-{year} {hour}:{minute}:{second}
           </div>
@@ -141,7 +125,7 @@ export default function Now(currentlyReading) {
         <div>
           <div className="flex justify-between gap-5">
             <div className="mt-2 mb-10 w-1/2 rounded-md border border-gray-600 p-1 text-sm dark:border-gray-200">
-              <span className="ml-2 font-semibold">Location:</span> <span>Ahmedabad, India</span>
+              <span className="ml-2 font-semibold">Location:</span> <span>Seoul, Korea</span>
               <br />
               <span className="ml-2 font-semibold">Weather:</span>{' '}
               <span>
@@ -169,8 +153,6 @@ export default function Now(currentlyReading) {
                 <span>{currentlyReadingData[0].title}</span> by{' '}
                 <span>{currentlyReadingData[0].author}</span>
               </a>
-              <br />
-              <span className="ml-2 font-semibold">Age:</span> <span>{ageString}</span>
             </div>
           </div>
 
@@ -203,7 +185,7 @@ export default function Now(currentlyReading) {
                 )}
               </span>
               <br />
-              <span className="ml-2 font-semibold">Drinking:</span> <span>Coffee</span>
+              <span className="ml-2 font-semibold">Loving:</span> <span>Cat & Music</span>
             </div>
           </div>
         </div>
@@ -212,7 +194,7 @@ export default function Now(currentlyReading) {
         </div>
         {/* Work */}
         <div className="pb-4">
-          <p>
+          {/* <p>
             I work as a Data Engineer at{' '}
             <Link
               href={'https://www.accenture.com/'}
@@ -222,72 +204,19 @@ export default function Now(currentlyReading) {
             </Link>
             .
           </p>
-          <br />
+          <br /> */}
           <p>
-            I work on building pipelines and automating the entire process using Scala and Gcloud.
+            저는 서비스 개발 및 운영 직무를 목표로 지속적으로 경험을 쌓으며 준비해오고 있습니다.
           </p>
           <br />
           <p>
-            I have been trying to shift my field from Data Engineering to Data Science. I have been
-            constantly applying for the same as well.
+            항상 새로운 것을 배우려 노력하고 있으며, 요즘은 오픈스택을 구축하는 일에 빠져있습니다.
           </p>
           <br />
           <p>
-            My location preference is Bangalore but I am open to shift to another place for a better
-            opportunity.
+            이 웹사이트를 통해 제가 하고 있는 일과 흥미로운 생각들을 공유하고 싶고, 스스로 성장해
+            나가는 과정을 기록하고자 합니다.
           </p>
-          <br />
-          <p>
-            I'm always trying to learn more, and at the moment I'm trying to follow this{' '}
-            <Link
-              href={
-                'https://www.youtube.com/watch?v=_u-PaJCpwiU&list=PLu0W_9lII9ai6fAMHp-acBmJONT7Y4BSG'
-              }
-              className="special-underline no-underline dark:text-gray-100 hover:dark:text-gray-100"
-            >
-              Machine Learning tutorial
-            </Link>
-            .
-          </p>
-        </div>
-        <div className="justify-center text-center text-2xl font-medium text-gray-200 dark:text-gray-600">
-          &#126;&#126;&#126;
-        </div>
-
-        {/* Personal life */}
-        <div className="pt-6">
-          <p>
-            I've been slowly building this website, trying to share interesting things with anyone
-            who wants to read it.{' '}
-            <Link
-              href={'https://www.swyx.io/learn-in-public'}
-              className="special-underline no-underline dark:text-gray-100 hover:dark:text-gray-100"
-            >
-              This
-            </Link>{' '}
-            article is a great reason to start your blog.
-          </p>
-          <br />
-          <p>
-            I am also going to start applying for Masters in Data Science in August 2022 for intake
-            of Fall 2023. I hope to get a good university near the West Coast. I'll update this page
-            after I get my admits.
-          </p>
-          <br />
-          <p>
-            I recently started to draft a post about my new Obsidian worklfow, it will be a good
-            one!
-          </p>
-        </div>
-        <div className="mt-3 text-sm">
-          For more examples of folks with /now pages, check out{' '}
-          <Link
-            href={'https://nownownow.com/'}
-            className="special-underline no-underline dark:text-gray-100 hover:dark:text-gray-100"
-          >
-            nownownow.com
-          </Link>
-          .
         </div>
       </div>
     </>

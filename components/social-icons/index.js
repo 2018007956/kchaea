@@ -1,10 +1,4 @@
-import {
-  AiOutlineMail,
-  AiOutlineGithub,
-  AiOutlineFacebook,
-  AiOutlineTwitter,
-  AiOutlineGlobal,
-} from 'react-icons/ai'
+import { AiOutlineMail, AiOutlineGithub, AiOutlineFacebook, AiOutlineGlobal } from 'react-icons/ai'
 import { FaLinkedinIn } from 'react-icons/fa'
 import { FiExternalLink, FiMail } from 'react-icons/fi'
 

@@ -48,13 +48,13 @@ export default function AuthorLayout({ children, frontMatter }) {
             </p>
             <br />
             <p>
+              현재 제가 하고 있는 일입니다.{' '}
               <Link
                 href={'/now'}
                 className="special-underline no-underline hover:text-gray-100 dark:text-gray-100 hover:dark:text-gray-100"
               >
-                이것은{' '}
+                Link
               </Link>
-              지금 제가 하고 있는 일입니다.
             </p>
             <br />
             <p className="sm:block md:hidden lg:hidden">
