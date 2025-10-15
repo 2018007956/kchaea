@@ -185,7 +185,7 @@ export default function Now(currentlyReading) {
                 )}
               </span>
               <br />
-              <span className="ml-2 font-semibold">Loving:</span> <span>Cat & Music</span>
+              <span className="ml-2 font-semibold">Loving:</span> <span>🐈 & 🎵</span>
             </div>
           </div>
         </div>
