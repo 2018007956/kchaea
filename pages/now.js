@@ -36,7 +36,6 @@ export const getServerSideProps = async () => {
 
 export default function Now(currentlyReading) {
   const { data } = useSWR('/api/now-playing', fetcher)
-  let currentlyReadingData = currentlyReading['currentlyReading']
   let weatherData = currentlyReading['data']
   const { temp: temperature } = weatherData.main
   const { icon: weatherIcon, description: weatherDescription } = weatherData.weather[0]
@@ -113,16 +112,21 @@ export default function Now(currentlyReading) {
             </div>
 
             <div className="mt-2 mb-10 w-1/2 rounded-md border border-gray-600 p-1 text-sm dark:border-gray-200">
-              <span className="ml-2 font-semibold">Reading:</span>{' '}
-              <a
-                href={currentlyReadingData[0].url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline-offset-1 hover:underline"
-              >
-                <span>{currentlyReadingData[0].title}</span> by{' '}
-                <span>{currentlyReadingData[0].author}</span>
-              </a>
+              <span className="ml-2 font-semibold">Listening:</span>{' '}
+              <span>
+                {data?.songUrl ? (
+                  <a
+                    href={data.songUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline-offset-1 hover:underline"
+                  >
+                    <span>{data.title}</span>
+                  </a>
+                ) : (
+                  <span>BIRDS OF A FEATHER - Billie Eilish</span>
+                )}
+              </span>
             </div>
           </div>
 
@@ -137,24 +141,7 @@ export default function Now(currentlyReading) {
                 {TodayDate.format('h:mm:ss A')}
               </span>
             </div>
-
             <div className="mt-2 mb-10 w-1/2 rounded-md border border-gray-600 p-1 text-sm dark:border-gray-200">
-              <span className="ml-2 font-semibold">Listening:</span>{' '}
-              <span>
-                {data?.songUrl ? (
-                  <a
-                    href={data.songUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline-offset-1 hover:underline"
-                  >
-                    <span>{data.title}</span>
-                  </a>
-                ) : (
-                  <span>Not Playing</span>
-                )}
-              </span>
-              <br />
               <span className="ml-2 font-semibold">Loving:</span> <span>🐈 & 🎵</span>
             </div>
           </div>
