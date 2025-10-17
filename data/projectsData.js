@@ -1,8 +1,8 @@
 const projectsData = [
   {
     title: 'OpenStack 환경 구축',
-    description: `오픈스택(OpenStack)을 직접 구축하며 클라우드 인프라의 구조와 서비스 간 동작 원리를 이해한 프로젝트입니다. 
-                Controller, Compute, Network, Storage 노드로 구성된 환경을 수동 설치 방식으로 구축하였으며, 네트워크 토폴로지 설계부터 Floating IP를 통한 외부 통신까지 실제 클라우드 서비스 환경과 유사한 구조를 실습했습니다.`,
+    description: `OpenStack을 직접 구축하며 클라우드 인프라의 구조와 서비스 간 동작 원리를 이해한 프로젝트입니다. 
+                Controller, Compute, Network, Storage 노드로 구성된 환경을 수동 설치 방식으로 구축하였으며, Self-Service Network와 Floating IP를 통한 외부 통신을 구현하며 실제 클라우드 서비스 환경과 유사한 구조를 실습했습니다.`,
     imgSrc: '',
     href: '',
     github: 'https://github.com/2018007956/TIL/tree/main/OpenStack',
@@ -18,17 +18,7 @@ const projectsData = [
     github: '',
     tech1: 'OpenStack',
     tech2: 'Python',
-    tech3: '',
-  },
-  {
-    title: '한화생명 융자 모바일 웹 기능 개선',
-    description: `융자 모바일 웹의 대출 신청 과정에서 보안을 강화하기 위해, 해외 및 범죄 IP를 차단하는 백엔드 로직을 개발했습니다. 이를 통해 서비스 접근의 안정성과 신뢰성을 높였으며, 이 과정에서 전문을 활용한 인터페이스 통신 구조를 분석하고 이해하며 서비스 개선에 기여했습니다.`,
-    imgSrc: '',
-    href: '',
-    github: '',
-    tech1: 'Java',
-    tech2: 'SpringBoot',
-    tech3: '',
+    tech3: 'Gerrit',
   },
   {
     title: '주가 예측 서비스, 알려주가AI',
@@ -42,11 +32,11 @@ const projectsData = [
   },
   {
     title: 'AI 기반의 커뮤니티 플랫폼',
-    description: `Salary Prediction App made with StreamLit just to practice the Streamlit framework. A Streamlit demo written in pure Python to predict salary based on your years of experience.`,
+    description: `스터디 학습 환경 개선을 위한 AI 답변 시스템을 적용한 커뮤니티 플랫폼입니다. `,
     imgSrc: '',
     href: '',
     github: 'https://github.com/2018007956/Preddit',
-    tech1: 'React, TypeScript',
+    tech1: 'TypeScript',
     tech2: 'PostgreSQL',
     tech3: 'Gemma2 API',
   },

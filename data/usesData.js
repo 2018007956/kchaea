@@ -6,7 +6,7 @@ const usesData = [
   },
   {
     title: 'LG Gram',
-    description: `이동이 많을 때 사용하는 휴대용 작업용 노트북입니다`,
+    description: `Intel Core i5-8250U @ 1.60 GHz (4 Core), 8 GB RAM, Windows 11 Home (23H2)`,
     href: '',
   },
   {

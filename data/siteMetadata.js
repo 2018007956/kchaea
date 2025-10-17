@@ -2,7 +2,7 @@ const siteMetadata = {
   title: 'Blog | Chaea Kim',
   author: 'Chaea Kim',
   headerTitle: 'Mere Musings',
-  description: '제가 배우고 경험한 기술들을 공유하는 블로그',
+  description: '채아킴 블로그',
   snippets: '재사용 가능한 코드 스니펫 모음입니다',
   language: 'ko-kr',
   theme: 'system', // system, dark or light

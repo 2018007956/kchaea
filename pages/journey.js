@@ -13,7 +13,7 @@ export default function Journey() {
             Journey
           </h1>
           <p className="text-md leading-7 text-gray-500 dark:text-gray-400">
-            Trying not to compare myself to others. Taking baby steps everyday.
+            다른 사람과 비교하지 않으려 노력하며, 매일 한 걸음씩 나아가고 있습니다.
           </p>
         </div>
         <motion.div
