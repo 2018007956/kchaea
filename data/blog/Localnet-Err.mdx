@@ -7,8 +7,8 @@ summary: 단일 NIC OVN 환경에서 발생한 관리망 단절 및 Compute SSH 
 ---
 
 <img className="inline" src="/static/images/Blog/localnet-err.png" alt="Localnet Error" />
-
-인스턴스 통신 문제를 검증하는 과정에서 localnet 포트를 재생성하게 되었는데, 아래 명령어 입력 직후 노드 세션이 끊겼고 나중에는 proxmox 연결까지 끊겼다.
+인스턴스 통신 문제를 검증하는 과정에서 localnet 포트를 재생성하게 되었는데, 아래 명령어 입력 직후 노드
+세션이 끊겼고 나중에는 proxmox 연결까지 끊겼다.
 
 ```
 LS_NAME="neutron-<provider-network-UUID>"
@@ -38,9 +38,9 @@ ovn-nbctl lsp-set-addresses ln-${PHYSNET} "unknown"
 
 그러나 재부팅 이후에도 문제가 완전히 해결된 것은 아니었다. **Compute 노드만 ssh 연결이 안되는 문제**가 있었는데, 생성했던 localnet을 제거하고 재부팅하니 정상 동작되었다. Compute 노드가 `br-ex`를 OVN이 provider uplink로 사용하려고 하면서 관리망 경로까지 꼬인 것인데, `ln-phynet2` 포트를 삭제하면서 `br-ex`에 걸려 있던 잘못된 데이터 플레인 연결이 끊기고 컴퓨트 노드의 네트워크 루트(route)와 인터페이스 상태가 정상으로 돌아온 것이다.
 
-여기서 다른 노드들은 ssh 접속에 문제가 없었는데 Compute 노드만 접속이 안됐던 이유는 다음과 같다. OVN 설정은 전체 노드에 전파되는데, `ln-phynet2` 같은 논리 포트 정보는 OVN Northbound DB에 저장된 뒤 모든 노드의 ovn-controller가 이를 구독해 플로우를 동기화한다. 그러나 이런 논리 구성이 곧바로 모든 노드의 물리 네트워크 동작에 영향을 주는 것은 아니다. 실제 물리 네트워크가 변하는 구간은 bridge_mappings가 선언된 노드에서만 발생한다. OVN이 localnet 네트워크를 물리 네트워크에 연결하려면 phynet2:br-ex와 같이 bridge_mappings가 필요하며, 이 설정이 있는 노드에서만 OVN이 br-ex를 통해 외부 uplink 연결을 시도한다.
+여기서 다른 노드들은 ssh 접속에 문제가 없었는데 Compute 노드만 접속이 안됐던 이유는 다음과 같다. OVN 설정은 전체 노드에 전파되는데, `ln-phynet2` 같은 논리 포트 정보는 OVN Northbound DB에 저장된 뒤 모든 노드의 ovn-controller가 이를 구독해 플로우를 동기화한다. 그러나 이런 논리 구성이 곧바로 모든 노드의 물리 네트워크 동작에 영향을 주는 것은 아니다. 실제 물리 네트워크가 변하는 구간은 bridge_mappings가 선언된 노드에서만 발생한다. OVN이 localnet 네트워크를 물리 네트워크에 연결하려면 `phynet2:br-ex`와 같이 bridge_mappings가 필요하며, 이 설정이 있는 노드에서만 OVN이 br-ex를 통해 외부 uplink 연결을 시도한다.
 
-Compute 노드는 phynet2:br-ex 매핑이 선언되어 있었기 때문에 OVN이 compute 노드를 provider 네트워크 경로에 참여시키려 했고, 그 과정에서 관리 네트워크 경로가 꼬이며 SSH 연결 문제가 발생했다. 반면 storage 노드는 bridge_mappings 설정이 없어 OVN이 해당 노드의 물리 NIC나 br-ex를 건드리지 않았고, network 노드는 애초에 provider 네트워크 처리를 위해 구성된 노드라 충돌이 발생하지 않았다.
+Compute 노드는 `phynet2:br-ex` 매핑이 선언되어 있었기 때문에 OVN이 compute 노드를 provider 네트워크 경로에 참여시키려 했고, 그 과정에서 관리 네트워크 경로가 꼬이며 SSH 연결 문제가 발생했다. 반면 storage 노드는 bridge_mappings 설정이 없어 OVN이 해당 노드의 물리 NIC나 br-ex를 건드리지 않았고, network 노드는 애초에 provider 네트워크 처리를 위해 구성된 노드라 충돌이 발생하지 않았다.
 
 과정을 정리해보면,
 
