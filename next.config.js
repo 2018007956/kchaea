@@ -56,7 +56,6 @@ module.exports = withBundleAnalyzer({
   reactStrictMode: true,
   images: {
     domains: [
-      'i.scdn.co', // Spotify Album Art
       'pbs.twimg.com',
       'cdn.discordapp.com', // discord url
       'avatars.githubusercontent.com',
@@ -64,11 +63,9 @@ module.exports = withBundleAnalyzer({
       's3.us-west-2.amazonaws.com', // Images coming from Notion
       'via.placeholder.com', // for articles that do not have a cover image
       'images.unsplash.com', // For blog posts that use an external cover image
-      'pbs.twimg.com', // Twitter Profile Picture
       'dwgyu36up6iuz.cloudfront.net',
       'cdn.hashnode.com',
       'res.craft.do',
-      'res.cloudinary.com', // Twitter Profile Picture
     ],
   },
   rewrites: async () => [

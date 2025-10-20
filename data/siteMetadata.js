@@ -10,10 +10,9 @@ const siteMetadata = {
   siteRepo: 'https://github.com/pycoder2000/blog',
   siteLogo: '/static/images/logo.png',
   image: '/static/images/avatar.png',
-  socialBanner: '/static/images/twitter-card.png',
+  socialBanner: '/static/images/logo.png',
   email: 'desaiparth2000@gmail.com',
   github: 'https://github.com/pycoder2000',
-  twitter: 'https://twitter.com/_ParthDesai_',
   linkedin: 'https://www.linkedin.com/in/parth-desai-2bb1b0160/',
   website: 'https://parthdesai.vercel.app',
   locale: 'en-US',
@@ -45,9 +44,7 @@ const siteMetadata = {
       themeURL: '',
     },
   },
-  socialAccount: {
-    twitter: '_ParthDesai_',
-  },
+  socialAccount: {},
 }
 
 module.exports = siteMetadata
