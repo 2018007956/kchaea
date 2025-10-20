@@ -13,11 +13,11 @@ export default function Uses() {
             Uses
           </h1>
           <p className="text-md leading-7 text-gray-500 dark:text-gray-400">
-            Software and hardware collection of things I'm using daily.
+            제가 매일 사용하는 소프트웨어와 하드웨어를 모아둔 목록입니다.
           </p>
           <div className="mt-5 mb-3 text-xs text-gray-500 dark:text-gray-400">
-            Note: This page contains links to buy or download the products. If you click through and
-            purchase, I do not receive any compensation for that purchase.
+            참고: 이 페이지에는 제품을 구매하거나 다운로드할 수 있는 링크가 포함되어 있습니다. 해당
+            링크를 통해 구매하시더라도 저는 어떠한 금전적 보상도 받지 않습니다.
           </div>
         </div>
         <div className="container py-12">
@@ -57,12 +57,6 @@ export default function Uses() {
               </Link>
             ))}
           </div>
-        </div>
-        <div className="pt-10">
-          <span className="text-base text-gray-500 dark:text-gray-400">
-            P.S. I am planning on remaking this site in the future, so stay around to see what I
-            come up with ;)
-          </span>
         </div>
       </div>
     </>

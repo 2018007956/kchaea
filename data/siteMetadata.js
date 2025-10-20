@@ -1,21 +1,21 @@
 const siteMetadata = {
-  title: 'Blog | Parth Desai',
-  author: 'Parth Desai',
+  title: 'Blog | Chaea Kim',
+  author: 'Chaea Kim',
   headerTitle: 'Mere Musings',
-  description: 'My personal blog where I share my musings',
-  snippets: 'Reuseable code snippets collected by Parth',
-  language: 'en-us',
+  description: '채아킴 블로그',
+  snippets: '재사용 가능한 코드 스니펫 모음입니다',
+  language: 'ko-kr',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://musing.vercel.app',
-  siteRepo: 'https://github.com/pycoder2000/blog',
+  siteUrl: 'https://kchaea.vercel.app',
+  siteRepo: 'https://github.com/2018007956/kchaea',
   siteLogo: '/static/images/logo.png',
   image: '/static/images/avatar.png',
   socialBanner: '/static/images/logo.png',
-  email: 'desaiparth2000@gmail.com',
-  github: 'https://github.com/pycoder2000',
-  linkedin: 'https://www.linkedin.com/in/parth-desai-2bb1b0160/',
-  website: 'https://parthdesai.vercel.app',
-  locale: 'en-US',
+  email: 'chaea11s0@gmail.com',
+  github: 'https://github.com/2018007956',
+  linkedin: 'https://www.linkedin.com/in/kchaea/',
+  website: 'https://kchaea.vercel.app',
+  locale: 'ko-KR',
   analytics: {
     plausibleDataDomain: '', // e.g. tailwind-nextjs-starter-blog.vercel.app
     simpleAnalytics: false, // true or false

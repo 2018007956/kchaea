@@ -18,7 +18,7 @@ export default function Stats() {
             Stats
           </h1>
           <p className="text-md leading-7 text-gray-500 dark:text-gray-400">
-            I use this dashboard to track various metrics across platforms like GitHub, and more.
+            이 대시보드를 사용하여 GitHub을 비롯한 여러 플랫폼의 다양한 지표를 추적합니다.
           </p>
         </div>
         <div className="pt-2">

@@ -77,34 +77,34 @@ export default function Now(currentlyReading) {
     return () => clearInterval(timer)
   }, [])
 
-  var ParthBirthDate = '2000-04-16'
-  var birthDate = new Date(ParthBirthDate)
+  var BirthDate = '1999-11-26'
+  var birthDate = new Date(BirthDate)
 
-  var ParthAge = year - birthDate.getFullYear()
+  var Age = year - birthDate.getFullYear()
 
-  var ParthMonth = 0
-  if (month >= birthDate.getMonth()) ParthMonth = month - birthDate.getMonth()
+  var Month = 0
+  if (month >= birthDate.getMonth()) Month = month - birthDate.getMonth()
   else {
-    ParthAge--
-    ParthMonth = 12 + month - birthDate.getMonth()
+    Age--
+    Month = 12 + month - birthDate.getMonth()
   }
 
-  var ParthDay = 0
-  if (date >= birthDate.getDate()) ParthDay = date - birthDate.getDate()
+  var Day = 0
+  if (date >= birthDate.getDate()) Day = date - birthDate.getDate()
   else {
-    ParthMonth--
-    ParthDay = 31 + date - birthDate.getDate()
-    if (ParthMonth < 0) {
-      ParthMonth = 11
-      ParthAge--
+    Month--
+    Day = 31 + date - birthDate.getDate()
+    if (Month < 0) {
+      Month = 11
+      Age--
     }
   }
 
   var age = {}
   age = {
-    years: ParthAge,
-    months: ParthMonth,
-    days: ParthDay,
+    years: Age,
+    months: Month,
+    days: Day,
   }
 
   var ageString = ''
@@ -141,12 +141,12 @@ export default function Now(currentlyReading) {
         <div>
           <div className="flex justify-between gap-5">
             <div className="mt-2 mb-10 w-1/2 rounded-md border border-gray-600 p-1 text-sm dark:border-gray-200">
-              <span className="ml-2 font-semibold">Location:</span> <span>Ahmedabad, India</span>
+              <span className="ml-2 font-semibold">Location:</span> <span>Seoul, Korea</span>
               <br />
               <span className="ml-2 font-semibold">Weather:</span>{' '}
               <span>
                 <a
-                  href="https://weather.com/en-GB/weather/today/l/f42d9f8baa19b4d8d5e034449faa703839993366f64551a56a2b530297075dc2"
+                  href="https://weather.com/en-GB/weather/today/l/Seoul+South+Korea?canonicalCityId=dfdaba8cbe3f4c949e44c3f4b8a1f77c0dd187d8f8c6d98d5e44a15b584a5a10"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="underline-offset-1 hover:underline"
@@ -203,7 +203,7 @@ export default function Now(currentlyReading) {
                 )}
               </span>
               <br />
-              <span className="ml-2 font-semibold">Drinking:</span> <span>Coffee</span>
+              <span className="ml-2 font-semibold">Loving:</span> <span>🐈 & 🎵</span>
             </div>
           </div>
         </div>
@@ -212,7 +212,7 @@ export default function Now(currentlyReading) {
         </div>
         {/* Work */}
         <div className="pb-4">
-          <p>
+          {/* <p>
             I work as a Data Engineer at{' '}
             <Link
               href={'https://www.accenture.com/'}
@@ -222,72 +222,18 @@ export default function Now(currentlyReading) {
             </Link>
             .
           </p>
+          <br /> */}
+          <p>저는 서비스 개발 및 운영 직무를 목표로 꾸준히 준비하고 있습니다.</p>
           <br />
           <p>
-            I work on building pipelines and automating the entire process using Scala and Gcloud.
-          </p>
-          <br />
-          <p>
-            I have been trying to shift my field from Data Engineering to Data Science. I have been
-            constantly applying for the same as well.
-          </p>
-          <br />
-          <p>
-            My location preference is Bangalore but I am open to shift to another place for a better
-            opportunity.
+            항상 새로운 것을 배우려 노력하고 있으며, 요즘은 오픈스택을 구축하는 일에 몰입하고
+            있습니다.
           </p>
           <br />
           <p>
-            I'm always trying to learn more, and at the moment I'm trying to follow this{' '}
-            <Link
-              href={
-                'https://www.youtube.com/watch?v=_u-PaJCpwiU&list=PLu0W_9lII9ai6fAMHp-acBmJONT7Y4BSG'
-              }
-              className="special-underline no-underline dark:text-gray-100 hover:dark:text-gray-100"
-            >
-              Machine Learning tutorial
-            </Link>
-            .
+            이 웹사이트를 통해 제가 하고 있는 일과 흥미로운 생각들을 공유하고, 스스로 성장해 나가는
+            과정을 기록하고자 합니다.
           </p>
-        </div>
-        <div className="justify-center text-center text-2xl font-medium text-gray-200 dark:text-gray-600">
-          &#126;&#126;&#126;
-        </div>
-
-        {/* Personal life */}
-        <div className="pt-6">
-          <p>
-            I've been slowly building this website, trying to share interesting things with anyone
-            who wants to read it.{' '}
-            <Link
-              href={'https://www.swyx.io/learn-in-public'}
-              className="special-underline no-underline dark:text-gray-100 hover:dark:text-gray-100"
-            >
-              This
-            </Link>{' '}
-            article is a great reason to start your blog.
-          </p>
-          <br />
-          <p>
-            I am also going to start applying for Masters in Data Science in August 2022 for intake
-            of Fall 2023. I hope to get a good university near the West Coast. I'll update this page
-            after I get my admits.
-          </p>
-          <br />
-          <p>
-            I recently started to draft a post about my new Obsidian worklfow, it will be a good
-            one!
-          </p>
-        </div>
-        <div className="mt-3 text-sm">
-          For more examples of folks with /now pages, check out{' '}
-          <Link
-            href={'https://nownownow.com/'}
-            className="special-underline no-underline dark:text-gray-100 hover:dark:text-gray-100"
-          >
-            nownownow.com
-          </Link>
-          .
         </div>
       </div>
     </>

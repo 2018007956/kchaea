@@ -21,11 +21,10 @@ export default function GuestbookPage({ fallbackData }) {
       </p> */}
         <div className="space-y-2 pt-6 pb-6 md:space-y-5">
           <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-5xl md:leading-14">
-            Guestbook
+            방명록
           </h1>
           <p className="text-md leading-7 text-gray-500 dark:text-gray-400">
-            An artifact of the 90's webs. Leave a comment below for my future visitors. Feel free to
-            write anything!
+            90년대 웹 감성이 묻어 있는 공간입니다. 아래에 자유롭게 댓글을 남겨주세요!
           </p>
         </div>
         <Guestbook fallbackData={fallbackData} />

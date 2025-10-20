@@ -23,16 +23,21 @@ export default function Home({ posts }) {
       <div>
         <div className="mb-12 flex flex-col items-center gap-x-12 xl:flex-row">
           <div className="pt-6">
-            <h1 className="pb-6 text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
-              Hi, I am{' '}
-              <span className="text-primary-color-500 dark:text-primary-color-dark-500">Parth</span>
+            <h1 className="pb-6 text-2xl font-extrabold leading-10 tracking-tight text-gray-900 dark:text-gray-100 sm:text-3xl sm:leading-12 md:text-4xl md:leading-14">
+              안녕하세요,
+              <br />
+              <span className="text-primary-color-500 dark:text-primary-color-dark-500">
+                기록하는 개발자
+              </span>{' '}
+              김채아입니다
             </h1>
-            <h2 className="prose pt-5 text-lg text-gray-600 dark:text-gray-300">
-              {`Welcome to ${siteMetadata.description}. I am a Data Engineer who is passionate about Data Science and Automation. In my free time, I like developing `}
-              side projects and learning new technologies.
+            <h2 className="prose pt-5 text-base text-gray-600 dark:text-gray-300">
+              {`저의 개인 블로그에 오신 것을 환영합니다. 저는 자동화를 통해 효율적인 시스템을 구축하는 일에 관심이 있으며, 클라우드 기술에 지속적인 관심을 가지고 있습니다. `}
+              여가 시간에는 AI 기술을 활용해 아이디어를 빠르게 서비스로 구현하는 사이드 프로젝트를
+              하는 것을 좋아합니다.
             </h2>
-            <p className="pt-5 text-lg leading-7 text-slate-600 dark:text-slate-300 sm:block md:hidden lg:hidden">
-              This is my place for{' '}
+            <p className="prosept-5 text-base leading-7 text-slate-600 dark:text-slate-300 sm:block md:hidden lg:hidden">
+              이곳은{' '}
               <RoughNotation
                 animate="true"
                 type="box"
@@ -42,12 +47,12 @@ export default function Home({ posts }) {
                 animationDuration={2500}
                 className="text-slate-200"
               >
-                thoughts, reflections & everything&nbsp;
+                제가 쌓아온 기술과 경험, 그리고 그 과정에서 얻은 인사이트&nbsp;
               </RoughNotation>
-              in between. Have a good read!
+              를 담은 공간입니다. 편하게 둘러보세요!{' '}
             </p>
-            <p className="hidden pt-10 text-lg leading-7 text-slate-600 dark:text-slate-300 md:block">
-              This is my place for{' '}
+            <p className="prose hidden pt-10 text-base leading-7 text-slate-600 dark:text-slate-300 md:block">
+              이곳은{' '}
               <RoughNotation
                 animate="true"
                 type="highlight"
@@ -57,9 +62,9 @@ export default function Home({ posts }) {
                 animationDuration={2500}
                 className="text-slate-200"
               >
-                thoughts, reflections & everything&nbsp;
+                제가 쌓아온 기술과 경험, 그리고 그 과정에서 얻은 인사이트&nbsp;
               </RoughNotation>
-              in between. Have a good read!{' '}
+              를 담은 공간입니다. 편하게 둘러보세요!{' '}
               <div className="mt-8 text-slate-600 dark:text-slate-400">
                 <span className="text-sm">Press</span>{' '}
                 <span className="rounded-md bg-gray-300 p-1 text-sm text-gray-900 dark:bg-gray-400">
@@ -135,7 +140,7 @@ export default function Home({ posts }) {
               <div className="my-2 grid items-start gap-8">
                 <div className="group relative">
                   <div className="animate-tilt absolute -inset-0.5 rounded-lg bg-gradient-to-r from-fuchsia-600 to-emerald-600 opacity-50 blur transition duration-1000 group-hover:opacity-100 group-hover:duration-200"></div>
-                  <Link href="https://parthdesai.vercel.app/">
+                  <Link href="https://github.com/2018007956">
                     <span className="relative flex items-center divide-x divide-gray-600 rounded-lg bg-white px-7 py-4 leading-none dark:bg-black">
                       <span className="flex items-center space-x-5">
                         <svg
@@ -152,10 +157,10 @@ export default function Home({ posts }) {
                             d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
                           />
                         </svg>
-                        <span className="pr-6 text-gray-900 dark:text-gray-100">Read my story</span>
+                        <span className="pr-6 text-gray-900 dark:text-gray-100">See my code</span>
                       </span>
                       <span className="pl-6 text-indigo-400 transition duration-200 group-hover:text-gray-900 dark:group-hover:text-gray-100">
-                        Website&nbsp;&rarr;
+                        GitHub&nbsp;&rarr;
                       </span>
                     </span>
                   </Link>
@@ -164,7 +169,7 @@ export default function Home({ posts }) {
               <div className="my-2 grid items-start gap-8">
                 <div className="group relative">
                   <div className="animate-tilt absolute -inset-0.5 rounded-lg bg-gradient-to-r  from-pink-600 to-purple-600 opacity-50 blur transition duration-1000 group-hover:opacity-100 group-hover:duration-200"></div>
-                  <Link href="https://parthdesai.vercel.app/resume.pdf">
+                  <Link href="https://docs.google.com/document/d/1RAl7p4pSo3fWz4_fN_NsG7En5o0eVECQ34c8mQwwvkQ/edit?usp=sharing">
                     <span className="relative flex items-center divide-x divide-gray-600 rounded-lg bg-white px-7 py-4 leading-none dark:bg-black">
                       <span className="flex items-center space-x-5">
                         <svg

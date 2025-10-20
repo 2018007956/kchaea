@@ -1,29 +1,25 @@
 const experienceData = [
   {
-    title: 'Data Engineering Intern',
-    company: 'Accenture',
-    location: 'Ahmedabad, India',
-    range: 'January 2022 - May 2022',
-    url: 'https://www.accenture.com/gr-en/about/consulting-index',
-    text1:
-      'Helped with the digital transformation of BOAT by working on their platform called ByteETL.',
-    text2:
-      'Built the encryption component for the platform using Scala and Spark which included 2 encoding functionalities : ENCRYPT and HASH.',
-    text3:
-      'Created JSON wrappers for the encryption components and automated and triggered the pipelines to run at specific intervals using CronJob.',
+    title: '인턴',
+    company: '한화시스템',
+    location: '서울 여의도',
+    range: '2025.01 - 2025.02',
+    url: '',
+    text1: '한화생명 융자 모바일 웹의 대출 신청 과정의 보안을 강화하기 위한 목적으로 수행',
+    text2: '해외/범죄 IP의 접근을 차단하는 백엔드 로직 개발',
+    text3: '이 과정에서 전문을 활용한 인터페이스 통신 구조를 분석하고 이해하며 서비스 개선에 기여',
   },
   {
-    title: 'Software Engineer Analytics',
-    company: 'HOPS Healthcare',
-    location: 'Ahmedabad, India',
-    range: 'March 2021 - June 2021',
-    url: 'https://hops.healthcare/',
+    title: '연구원',
+    company: '서울대학교 병원',
+    location: '서울 종로구',
+    range: '2021.07 - 2022.07',
+    url: '',
     text1:
-      'Guided by Mr. Vivek Patel, to create a pipeline that extracts essential information from informal conversations.',
-    text2:
-      'Worked on creating a web app for their healthcare system for doctors to analyze and save reports.',
+      '질환 재발 기간을 예측하여 주기적인 검사에 드는 비용을 감소하기 위한 목적으로 황반변성 재발 여부 예측 연구 수행',
+    text2: '환자 데이터 구축을 위한 과정 수립 및 품질 관리를 위한 전처리 수행',
     text3:
-      'Developed functions for automatically extracting important elements from reports using BioBERT and Regex.',
+      'baseline과 loading 이후 병변의 크기 변화와 임상 정보 데이터를 활용하여 3달 내 황반변성의 재발 여부를 예측',
   },
 ]
 
