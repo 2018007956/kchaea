@@ -1,0 +1,99 @@
+---
+title: 'OpenStack 구축기 #2: 설치 전 알아야 할 컴포넌트와 아키텍처'
+date: '2025-09-28'
+tags: [OpenStack, Build, Architecture]
+draft: false
+summary: 노드별 주요 서비스와 아키텍처를 통한 OpenStack 내부 동작 구조 이해
+---
+
+<img className="inline" src="/static/images/Blog/openstack-architecture.png" />
+OpenStack을 직접 구축하기 전에 반드시 이해해야 할 개념이 있다. OpenStack은 단순한 가상머신 생성 도구가
+아니라, 클라우드 인프라 전체를 구성하는 거대한 분산 시스템이다. 따라서 구축을 시작하기 전, OpenStack을
+이루는 주요 노드 구성과 각 노드의 역할을 이해해두면 설치 과정뿐 아니라 이후의 운영과 문제 해결에도 큰
+도움이 된다.
+
+OpenStack은 여러 역할을 수행하는 노드들이 조합되어 하나의 클라우드 환경을 이룬다. OpenStack은 환경 규모와 목적에 따라 다양한 방식으로 구성할 수 있는데, 나는 다음과 같이 Controller / Compute / Network / Storage 네 가지 역할로 구분해서 구성했다.
+
+| 노드           | 역할                                       | 핵심 서비스                                                 |
+| -------------- | ------------------------------------------ | ----------------------------------------------------------- |
+| **Controller** | 클라우드 전체 제어, API/인증/스케줄링 담당 | Keystone, Glance, Nova-api, Neutron-server, Horizon, DB, MQ |
+| **Compute**    | VM 실행 및 컴퓨팅 자원 제공                | nova-compute, Libvirt/KVM                                   |
+| **Network**    | 네트워크 라우팅 및 외부 연결               | Neutron L3/DHCP/Metadata agent, OVS/OVN, br-ex              |
+| **Storage**    | 블록/오브젝트 저장소 제공                  | Cinder, Swift, Ceph                                         |
+
+## Controller Node
+
+**- 클라우드의 두뇌**
+
+Controller 노드는 OpenStack의 Control Plane으로서 API 요청 처리, 인증/권한 관리, 스케줄링, 서비스 간 조율 및 시스템 전반의 상태를 관리하는 중앙 관리 노드이다. 사용자의 요청을 Nova, Neutron, Cinder 등의 각 서비스에 전달해 스케줄링과 오케스트레이션을 수행한다. 운영자 입장에서 가장 많이 다루는 노드이며, 주요 컴포넌트는 다음과 같다.
+
+<img className="inline" src="/static/images/Blog/controller-services.png" />
+
+- **Keystone (Identity)** - 인증/권한 관리
+- **Glance (Image)** - 이미지 관리
+- **Nova-api, scheduler, conductor** - VM 생성/스케줄링 제어
+- **Neutron-server** - 네트워크 API, 플러그인, DB 관리
+- **Horizon (Dashboard)** - 대시보드(UI)
+- **MariaDB/MySQL, RabbitMQ/etcd** - DB/메시지 브로커
+
+## Compute Node
+
+**- 가상 머신이 실제로 실행되는 곳**
+
+Compute 노드는 가상 머신 인스턴스를 실행하는 물리 서버이며, CPU, 메모리 리소스 등을 제공하는 클라우드의 컴퓨팅 파워(연산 리소스)를 담당한다. 사용자가 인스턴스를 생성하면 Nova 스케줄러가 Nova-compute 서비스를 동작시키며 하이퍼바이저(KVM, QEMU 등)를 통해 VM을 띄운다.
+
+Compute 노드는 Neutron 에이전트와 연동해 VM의 가상 NIC를 Open vSwitch 또는 OVN에 연결하고, Overlay 네트워크를 통해 다른 Network 노드 및 Compute 노드와 통신한다. 주요 컴포넌트는 다음과 같다.
+
+<img className="inline" src="/static/images/Blog/compute-services.png" />
+
+- **nova-compute** - VM 생성/삭제/관리
+- **Libvirt + KVM/QEMU** - 하이퍼바이저 계층
+
+## Network Node
+
+**- 클라우드의 네트워크 게이트웨이**
+
+Network 노드는 VM과 외부 네트워크(Internet, 물리망)을 연결해주는 네트워크 출구 노드다. OpenStack의 네트워크는 Self-Service Network(테넌트 네트워크)와 Provider Network(물리 네트워크)로 구성되는데, 이 둘의 트래픽을 라우팅/NAT 해주는 역할을 한다. 주요 컴포넌트는 다음과 같다.
+
+<img className="inline" src="/static/images/Blog/network-services.png" />
+
+- **Neutron OVS/OVN agent** - Neutron과 통신하며 브릿지/포트 설정 관리
+- **L3 agent** - 라우터 기능(SNAT/DNAT, Floating IP)
+- **DHCP agent** - VM 내부 IP 자동 할당
+- **Metadata agent** - VM에 초기 설정 데이터 전달(cloud-init)
+- **OVS/OVN Bridge** - 실제 네트워크 데이터 패킷을 전달하는 가상 스위치
+
+**[네트워크 구조 예시]**  
+OpenStack은 Overlay 네트워크와 Provider 네트워크를 함께 사용하는 하이브리드
+구조를 가진다.
+
+- Overlay (Geneve/VXLAN) : VM ↔ VM 간 통신 (노드 간 터널링)
+- Provider Network (flat/VLAN) : 외부 네트워크나 물리망과 연결
+- br-ex : 외부 통신을 위한 가상 브리지
+
+OVN 기반의 Geneve 터널을 사용할 경우, VM 간 트래픽은 `br-int → Geneve 터널 → 다른 노드`로 전달되고, 외부 인터넷과 통신해야 할 때는 `br-ex → 물리 NIC → 라우터` 흐름을 탄다.
+
+## Storage Node
+
+**- 클라우드의 데이터와 볼륨 저장소**
+
+Storage 노드는 VM 운영에 필요한 디스크 볼륨이나 이미지, 파일 데이터를 저장하는 역할을 한다. 주요 컴포넌트는 다음과 같다.
+
+<img className="inline" src="/static/images/Blog/storage-services.png" />
+
+- cinder-volume / cinder-backend drivers
+- swift-proxy, swift-object, swift-container, swift-account
+- ceph-mon, ceph-osd, ceph-mgr
+
+**[스토리지 종류]**  
+스토리지 선택은 OpenStack의 용도에 따라 달라지며, 테스트 환경에서는 LVM, 실제 운영 환경에서는 Ceph를 주로 사용한다.
+
+- **Cinder (Block Storage)**
+  - VM에 attach 가능한 볼륨 디스크 제공
+  - LVM, Ceph RBD, iSCSI 등 백엔드 스토리지 사용 가능
+- **Swift (Object Storage)**
+  - 파일/오브젝트 저장 (S3 유사)
+  - 분산 스토리지로 확장성 높음
+- **Ceph**
+  - 대규모 분산 스토리지로 자주 사용됨
+  - Block, Object, Image(Glance) 저장소를 모두 지원 가능

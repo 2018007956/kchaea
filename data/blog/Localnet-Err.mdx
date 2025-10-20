@@ -1,0 +1,55 @@
+---
+title: 왜 OVN 환경에서 단일 NIC 구성이 위험한가 - localnet 추가 후 br-ex 관리망이 끊긴 이유
+date: '2025-10-18'
+tags: [OpenStack, OVN, localnet]
+draft: false
+summary: 단일 NIC OVN 환경에서 발생한 관리망 단절 및 Compute SSH 장애 사례 분석
+---
+
+<img className="inline" src="/static/images/Blog/localnet-err.png" alt="Localnet Error" />
+인스턴스 통신 문제를 검증하는 과정에서 localnet 포트를 재생성하게 되었는데, 아래 명령어 입력 직후 노드
+세션이 끊겼고 나중에는 proxmox 연결까지 끊겼다.
+
+```
+LS_NAME="neutron-<provider-network-UUID>"
+PHYSNET="phynet2"
+
+ovn-nbctl lsp-add ${LS_NAME} ln-${PHYSNET}
+ovn-nbctl lsp-set-type ln-${PHYSNET} localnet
+ovn-nbctl lsp-set-options ln-${PHYSNET} network_name=${PHYSNET}
+ovn-nbctl lsp-set-addresses ln-${PHYSNET} "unknown"
+```
+
+서버에 접근할 수 없어서 상황 분석을 할 수 없었기에, 아래와 같은 재부팅 과정을 거쳤다.
+
+1. **LAN 케이블 재연결**
+2. **노드 재부팅**
+
+재부팅 후 플로우/캐시/링크 순서가 새로 정리되면서 노드 접속까진 되었다. 문제 원인을 분석해보니, `localnet` 포트를 추가하면서 OVN이 `br-ex`의 플로우를 다시 구성하는 순간 커널이 `br-ex`를 통한 관리 트래픽을 잠시 처리하지 못하게 되어 다음과 같은 현상이 발생한 것이다.
+
+1. **OVN 구성 재적용**  
+   `ovn-nbctl lsp-add … type=localnet` 명령을 통해 새 localnet 포트를 추가하면, OVN Controller는 해당 물리 네트워크(`physnet2`)와 매핑된 브리지(`br-ex`)를 다시 동기화한다. 이 과정에서 `br-ex`의 OpenFlow 규칙과 `provnet-` 포트가 재생성되어, `enp6s18 ↔ OVN ↔ Logical Switch` 구조가 재적용된다.
+2. **네트워크 경로 재구성에 따른 관리 트래픽 단절**  
+   OVS가 `br-ex`를 재구성하는 동안, `br-ex`를 통해 오가던 관리 트래픽(SSH, Web UI 등)의 커널 네트워크 경로가 일시적으로 차단된다. 이는 `br-ex` 내부의 `LOCAL` 플로우와 포트 상태가 재설정되는 짧은 구간 동안 발생하며, 호스트(또는 Proxmox)가 `br-ex` 또는 `enp6s18`과 연결되어 있다면, 관리 인터페이스가 일시적으로 down 상태로 전환되어 콘솔/웹 UI 모두 접근이 불가해진다.
+3. **관리 인터페이스와 세션 영향**  
+   관리 인터페이스가 `br-ex`를 통해 구성되어 있을 경우, 커널이 `br-ex`의 IP를 잠시 잃으면서 관리 IP가 유효하지 않게 되고, SSH, Proxmox Web UI, VM 네트워크가 모두 끊기게 된다. 이 현상은 `br-ex`가 다시 활성화되며 OpenFlow가 재적용되는 동안 **일시적인 down/up**이 발생한 결과이다. 이후 OVS가 `LOCAL` 경로를 다시 세팅하면 복구되지만, 세션은 이미 끊겼다.
+4. **상태 복구**  
+   `OVS`가 `br-ex`의 `LOCAL` 경로와 플로우 테이블을 재구성한 뒤 `br-ex` 인터페이스가 다시 `UP` 상태로 전환되면, 관리 IP는 정상적으로 복구되고 통신이 다시 가능해진다. 하지만 세션(SSH, Web UI)은 이미 끊긴 상태이므로 재접속이 필요하다.
+
+그러나 재부팅 이후에도 문제가 완전히 해결된 것은 아니었다. **Compute 노드만 ssh 연결이 안되는 문제**가 있었는데, 생성했던 localnet을 제거하고 재부팅하니 정상 동작되었다. Compute 노드가 `br-ex`를 OVN이 provider uplink로 사용하려고 하면서 관리망 경로까지 꼬인 것인데, `ln-phynet2` 포트를 삭제하면서 `br-ex`에 걸려 있던 잘못된 데이터 플레인 연결이 끊기고 컴퓨트 노드의 네트워크 루트(route)와 인터페이스 상태가 정상으로 돌아온 것이다.
+
+여기서 다른 노드들은 ssh 접속에 문제가 없었는데 Compute 노드만 접속이 안됐던 이유는 다음과 같다. OVN 설정은 전체 노드에 전파되는데, `ln-phynet2` 같은 논리 포트 정보는 OVN Northbound DB에 저장된 뒤 모든 노드의 ovn-controller가 이를 구독해 플로우를 동기화한다. 그러나 이런 논리 구성이 곧바로 모든 노드의 물리 네트워크 동작에 영향을 주는 것은 아니다. 실제 물리 네트워크가 변하는 구간은 bridge_mappings가 선언된 노드에서만 발생한다. OVN이 localnet 네트워크를 물리 네트워크에 연결하려면 `phynet2:br-ex`와 같이 bridge_mappings가 필요하며, 이 설정이 있는 노드에서만 OVN이 br-ex를 통해 외부 uplink 연결을 시도한다.
+
+Compute 노드는 `phynet2:br-ex` 매핑이 선언되어 있었기 때문에 OVN이 compute 노드를 provider 네트워크 경로에 참여시키려 했고, 그 과정에서 관리 네트워크 경로가 꼬이며 SSH 연결 문제가 발생했다. 반면 storage 노드는 bridge_mappings 설정이 없어 OVN이 해당 노드의 물리 NIC나 br-ex를 건드리지 않았고, network 노드는 애초에 provider 네트워크 처리를 위해 구성된 노드라 충돌이 발생하지 않았다.
+
+과정을 정리해보면,
+
+> `ln-phynet2` 존재 → OVN이 컴퓨트 노드를 provider 네트워크 노드처럼 취급  
+>  → `br-ex`와 OVN 사이 트래픽 연결 시작  
+>  → 관리망 라우팅이 `br-ex`를 통해 OVN datapath로 빨려들어감  
+>  → 관리망 세션(SSH, 컨트롤러 연결 등) 끊김  
+>  → `lsp-del ln-phynet2` 후 OVN이 br-ex를 더 이상 잡아먹지 않음  
+>  → 컴퓨트는 원래의 관리 네트워크 경로 복구  
+>  → SSH 정상 동작
+
+이번 문제를 통해 <mark>OVN 환경에서는 단일 NIC로 관리망과 외부 네트워크 트래픽을 모두 처리할 경우 충돌과 장애 위험이 크다</mark>는 점을 실감했으며, 운영 안정성을 위해 SSH, API, DB, RPC와 같은 제어 및 관리 트래픽을 전담하는 관리망 NIC와 Provider/External NIC를 분리한 설계의 필요성을 확인했다. 다음 글에서 NIC를 분리하는 과정을 살펴보자.
