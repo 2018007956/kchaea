@@ -22,9 +22,9 @@ summary: Provider Network의 한계를 보완하기 위해 도입한 Self-Servic
 
 ## 1. 내부 구조
 
-**OVS 환경**에서는 `VXLAN` 기반의 Overlay 네트워크로 Self-Service Network를 구성하며, 라우팅과 NAT 처리는 **L3 Agent가 네트워크 노드에서 중앙 집중식으로 처리**한다. 반면 **OVN 기반 환경**에서는 `Geneve` 기반 Overlay를 사용하고, **분산 라우팅(DVR) 구조**를 지원하여 성능과 확장성 측면에서 보다 효율적인 네트워크 구조를 제공한다. OVN은 OVS 위에 확장되어 동작하는 SDN 기반 네트워크 가상화 시스템으로, 네트워크 구성과 운영 복잡도를 줄이고 안정적인 대규모 클라우드 네트워크 구성을 가능하게 한다.
+**OVS 환경**에서는 `VXLAN` 기반의 Overlay 네트워크로 Self-Service Network를 구성하며, 라우팅과 NAT 처리는 **L3 Agent가 네트워크 노드에서 중앙 집중식으로 처리**한다. 반면 **OVN 환경**에서는 `Geneve` 기반 Overlay를 사용하고, **분산 라우팅(DVR) 구조**를 지원하여 성능과 확장성 측면에서 보다 효율적인 네트워크 구조를 제공한다. OVN은 OVS 위에 확장되어 동작하는 SDN 기반 네트워크 가상화 시스템으로, 네트워크 구성과 운영 복잡도를 줄이고 안정적인 대규모 클라우드 네트워크 구성을 가능하게 한다.
 
-[왜 OVN 환경에서 단일 NIC 구성이 위험한가 - localnet 추가 후 br-ex 관리망이 끊긴 이유](https://kchaea.vercel.app/blog/Localnet-Err) 이 글을 보면, OVN 환경에서는 2개의 물리 NIC가 필요하다는 것을 알 수 있다. 그렇다면 OVN 환경에서 Self-Service Network를 구축할 때, 물리 NIC를 어떻게 구성하는지 살펴보자.
+[왜 OVN 환경에서 단일 NIC 구성이 위험한가 - localnet 추가 후 br-ex 관리망이 끊긴 이유](https://kchaea.vercel.app/blog/Localnet-Err) 이 글을 보면, OVN 환경에서 Self-Service Network를 구축할 때 2개의 물리 NIC가 필요하다는 것을 알 수 있다. 그렇다면 각 NIC가 어떤 네트워크에 연결되는지 구조를 살펴보자.
 
 - **NIC 1 – 관리망(Management Network)**  
   관리망은 OpenStack의 내부 통신을 담당하며, 컨트롤 플레인 서비스 간 통신(Keystone API, Neutron RPC, MariaDB, RabbitMQ 등)과 SSH 접속을 처리한다. 그림에서 🔴 <span style={{ color: 'red' }}>빨간색 네트워크의 Interface 1</span> 에 해당한다.
@@ -32,7 +32,7 @@ summary: Provider Network의 한계를 보완하기 위해 도입한 Self-Servic
 - **NIC 2 – Provider/External Network**  
   외부 인터넷과 통신하기 위한 네트워크 인터페이스이며, Floating IP가 바인딩되는 네트워크이다. 그림에서는 🟢 <span style={{ color: 'green' }}>초록색 네트워크의 Interface 2</span> 에 해당한다.
 
-반면, 🟣 <span style={{ color: 'purple' }}>Self-Service Network</span>는 물리 NIC와 직접 연결되지 않는다. 이 네트워크는 Geneve/VXLAN 기반 오버레이 네트워크로 구현되며, VM 간 통신은 터널(Tunnel)을 통해 전달된다. 캡슐화된 오버레이 트래픽은 실제로 🔴 관리망 NIC를 통해 노드 간 교환되는데, 네트워크 논리 구조는 완전히 분리되어 유지된다.
+반면, 🟣 <span style={{ color: 'purple' }}>Self-Service Network</span>는 물리 NIC와 직접 연결되지 않는다. 이 네트워크는 Geneve/VXLAN 기반 오버레이 네트워크로 구현되며, VM 간 통신은 터널(Tunnel)을 통해 전달된다. 캡슐화된 오버레이 트래픽은 Underlay로 지정한 NIC(전용 터널 NIC가 이상적이며, 실습 환경에선 관리망 NIC를 겸용하기도 함)를 통해 호스트 간 전달된다. 물리 경로를 공유하더라도, **캡슐화와 OVN의 논리 스위치/라우터 구조** 덕분에 Self-Service Network는 관리망과 논리적으로 격리된 상태로 동작한다.
 
 ## 2. 트래픽 흐름
 
@@ -41,59 +41,73 @@ Self-Service Network에서 트래픽은 다음과 같이 흐른다.
 1. **내부 통신 (VM ↔ VM)**  
    같은 테넌트 안에서는 Geneve/VXLAN 터널을 통해 노드 간 패킷이 전달된다.
 
-```
-VM1 (10.0.0.5) → br-int → Geneve/VXLAN Tunnel → br-int → VM2 (10.0.0.6)
-```
+   ```
+   VM1 (10.0.0.5) → br-int → Geneve/VXLAN Tunnel → br-int → VM2 (10.0.0.6)
+   ```
+
+   Geneve 기반 Overlay 터널링의 패킷 처리 과정을 자세히 살펴보면 다음과 같다.  
+   이때 어느 물리 NIC로 나가느냐는 `ovn-encap-ip` 에서 설정한다.
+
+   ```
+   VM1 (tap)
+   -> br-int (OVS/OVN)
+      -> Geneve 캡슐화
+         -> (선택된 Underlay NIC의 IP로 송신: NIC-TUN 또는 NIC-MGMT)
+           -> 물리 스위치/라우터 경유
+         -> (상대 호스트의 Underlay NIC 도착)
+      -> 디캡슐화
+   -> br-int
+   -> VM2 (tap)
+   ```
 
 2. **내부 → 외부 통신 (VM → Internet)**  
    Router Namespace에서 SNAT 수행하여 내부 IP(10.x.x.x)가 Provider Network IP(203.x.x.x)로 변경된다.
 
-```
-VM (10.0.0.5)
-   ↓
-Self-Service Network
-   ↓
-tap 인터페이스 (가상 NIC)
-   ↓
-br-int (Integration Bridge)
-   ↓
-qr-xxxxx (Router 내부 인터페이스)
-   ↓ Router Namespace (qrouter)
-   ↓ SNAT 수행 (10.x → 203.x 변환)
-   ↓
-qg-xxxxx (라우터 외부 게이트웨이 인터페이스)
-   ↓
-br-ex (External Bridge)
-   ↓
-Provider Network
-   ↓
-Internet
-```
+   ```
+   VM (10.0.0.5)
+      ↓
+   Self-Service Network
+      ↓
+   tap 인터페이스 (가상 NIC)
+      ↓
+   br-int (Integration Bridge)
+      ↓
+   qr-xxxxx (Router 내부 인터페이스)
+      ↓ Router Namespace (qrouter)
+      ↓ SNAT 수행 (10.x → 203.x 변환)
+      ↓
+   qg-xxxxx (라우터 외부 게이트웨이 인터페이스)
+      ↓
+   br-ex (External Bridge)
+      ↓
+   Provider Network
+      ↓
+   Internet
+   ```
 
 3. **외부 → 내부 접속 (Internet → VM)**  
    Router Namespace에서 DNAT 수행하여 Provider Network IP(203.x.x.x)가 내부 IP(10.x.x.x)로 변경된다.
-
-```
-Internet
-   ↓
-Provider Network
-   ↓
-br-ex (External Bridge)
-   ↓
-qg-xxxxx (라우터 외부 게이트웨이 인터페이스)
-   ↓ Router Namespace (qrouter)
-   ↓ DNAT 수행 (Floating IP → Private IP 변환)
-   ↓
-qr-xxxxx (라우터 내부 인터페이스)
-   ↓
-br-int (Integration Bridge)
-   ↓
-tap 인터페이스 (가상 NIC)
-   ↓
-Self-Service Network
-   ↓
-VM (10.0.0.5)
-```
+   ```
+   Internet
+      ↓
+   Provider Network
+      ↓
+   br-ex (External Bridge)
+      ↓
+   qg-xxxxx (라우터 외부 게이트웨이 인터페이스)
+      ↓ Router Namespace (qrouter)
+      ↓ DNAT 수행 (Floating IP → Private IP 변환)
+      ↓
+   qr-xxxxx (라우터 내부 인터페이스)
+      ↓
+   br-int (Integration Bridge)
+      ↓
+   tap 인터페이스 (가상 NIC)
+      ↓
+   Self-Service Network
+      ↓
+   VM (10.0.0.5)
+   ```
 
 <br />
 Self-Service Network 구축은 이론보다 훨씬 까다로웠다. 다음 글부터는 실제 구축 과정에서 발생한 각종 네트워크

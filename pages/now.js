@@ -62,13 +62,13 @@ export default function Now(currentlyReading) {
     _50n: <BsCloudFogFill className="mb-0.5 inline h-3 w-3 hover:animate-spin" />,
   }
 
-  var year = new Date().getFullYear()
-  var month = new Date().getMonth()
-  var date = new Date().getDate()
-  var hour = new Date().getHours()
-  var minute = new Date().getMinutes()
-  var second = new Date().getSeconds()
-  const now = () => dayjs().tz()
+  const now = () => dayjs().tz('Asia/Seoul')
+  var year = now().year()
+  var month = now().month()
+  var date = now().date()
+  var hour = now().hour()
+  var minute = now().minute()
+  var second = now().second()
   const format = 'hhA'
   const [TodayDate, setDate] = useState(now())
 
