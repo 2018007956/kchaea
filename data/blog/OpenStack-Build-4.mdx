@@ -53,11 +53,11 @@ Self-Service Network에서 트래픽은 다음과 같이 흐른다.
    -> br-int (OVS/OVN)
       -> Geneve 캡슐화
          -> (선택된 Underlay NIC의 IP로 송신: NIC-TUN 또는 NIC-MGMT)
-           -> 물리 스위치/라우터 경유
+            -> 물리 스위치/라우터 경유
          -> (상대 호스트의 Underlay NIC 도착)
       -> 디캡슐화
    -> br-int
-   -> VM2 (tap)
+   VM2 (tap)
    ```
 
 2. **내부 → 외부 통신 (VM → Internet)**  

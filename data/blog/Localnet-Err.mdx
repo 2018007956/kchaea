@@ -1,5 +1,5 @@
 ---
-title: 왜 OVN 환경에서 단일 NIC 구성이 위험한가 - localnet 추가 후 관리 트래픽이 끊긴 이유
+title: 왜 OVN 환경에서 단일 NIC 구성이 위험한가 - localnet 설정 후 관리 트래픽이 끊긴 이유
 date: '2025-10-18'
 tags: [OpenStack, Network, Troubleshooting]
 draft: false
@@ -33,10 +33,10 @@ ovn-nbctl lsp-set-addresses ln-${PHYSNET} "unknown"
    일반적으로 관리 네트워크(SSH, API, Proxmox UI 등)는 외부 통신용 브리지 `br-ex`와 분리하여 구성하는 것이 권장된다. 하지만 본 환경에서는 `netplan`이 아래와 같이 설정되어 있었기 때문에 관리 트래픽이 모두 `br-ex`를 통해 흐르는 구조였다.
    ```yaml
    bridges:
-   br-ex:
-     interfaces: [enp6s18]
-     addresses:
-       - node_ip_addr/24
+     br-ex:
+       interfaces: [enp6s18]
+       addresses:
+         - node_ip_addr/24
    ```
    위 설정은 Host IP가 물리 NIC(enp6s18)가 아닌 br-ex에 직접 할당되어 있다는 뜻이며, 결과적으로 외부에서 노드로 들어오는 SSH와 Proxmox Web UI 접속이 모두 br-ex를 경유하도록 구성되어 있었다. 따라서 br-ex는 외부 네트워크 연결뿐 아니라 사실상 관리망 역할까지 겸하고 있었다고 볼 수 있다.
 3. **br-ex 재적용 과정에서 관리 트래픽 단절**  
