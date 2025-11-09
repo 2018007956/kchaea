@@ -2,7 +2,7 @@ const experienceData = [
   {
     title: '인턴',
     company: '한화시스템',
-    location: '서울 여의도',
+    location: '서울시 여의도',
     range: '2025.01 - 2025.02',
     url: '',
     text1: '한화생명 융자 모바일 웹의 대출 신청 과정의 보안을 강화하기 위한 목적으로 수행',
@@ -12,7 +12,7 @@ const experienceData = [
   {
     title: '연구원',
     company: '서울대학교 병원',
-    location: '서울 종로구',
+    location: '서울시 종로구',
     range: '2021.07 - 2022.07',
     url: '',
     text1:

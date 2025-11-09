@@ -3,6 +3,8 @@ import { PageSEO } from '@/components/SEO'
 import Link from '@/components/Link'
 import Experience from '@/components/Experience'
 import experienceData from '@/data/experienceData'
+import Presentation from '@/components/Presentation'
+import presentationData from '@/data/presentationData'
 import { RoughNotation } from 'react-rough-notation'
 
 export default function AuthorLayout({ children, frontMatter }) {
@@ -144,6 +146,25 @@ export default function AuthorLayout({ children, frontMatter }) {
                     company={d.company}
                     location={d.location}
                     range={d.range}
+                    url={d.url}
+                    text1={d.text1}
+                    text2={d.text2}
+                    text3={d.text3}
+                  />
+                ))}
+              </div>
+            </div>
+            <br />
+            <div>
+              <h1>Presentation</h1>
+              <div className="max-w-none pt-8 pb-8 xl:col-span-2">
+                {presentationData.map((d) => (
+                  <Presentation
+                    key={d.title}
+                    title={d.title}
+                    event={d.event}
+                    location={d.location}
+                    date={d.date}
                     url={d.url}
                     text1={d.text1}
                     text2={d.text2}
