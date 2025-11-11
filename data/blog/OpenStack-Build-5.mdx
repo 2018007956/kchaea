@@ -1,0 +1,40 @@
+---
+title: 'OpenStack 구축기 #5: 네트워크 구축 및 인스턴스 통신 성공'
+date: '2025-11-11'
+tags: [OpenStack, Build, Network]
+draft: false
+summary: 장장 2개월 간의 오픈스택 구축 여정 마무리
+---
+
+오늘부로 오래 붙잡고 있던 네트워크 구축에 성공했다.
+
+이번에 해결한 주요 내용은 아래와 같다.
+
+**1. Geneve 터널 정상 구축**  
+Compute와 Network 노드 사이에 Geneve 터널이 정상적으로 구성되면서, 물리망에서 라우터 게이트웨이까지의 통신이 가능해졌다. 이를 통해 Compute 노드에서 생성된 VM 트래픽이 Geneve 오버레이를 타고 Network 노드의 논리 라우터 게이트웨이까지 도달할 수 있음을 확인했다.
+
+**2. NIC 분리 구성**  
+[OpenStack 구축기 #4: Self-Service Network 내부 구조와 트래픽 흐름](https://kchaea.vercel.app/blog/OpenStack-Build-4)에서 설명하는 Self-Service 네트워크의 내부 구조와 동일하게 구성하기위해, Provider Network NIC : `enp6s18`, Geneve Tunnels NIC : `enp6s19` 두 개로 NIC를 분리했고, `ovn-encap-ip`를 `enp6s19`로 지정해줬다.
+
+**3. OVN 설정값을 올바르게 세팅**  
+`ovn-encap-ip`: 각 노드가 Geneve 터널을 맺을 때 사용하는 오버레이 네트워크용 IP(10.x 대역)  
+`ovn-remote`: OVN Southbound DB가 위치한 컨트롤러 노드의 물리망 IP
+
+**4. Provider 네트워크 구조 이해**  
+Compute 노드는 Provider 네트워크와 직접 연결되는 게 아니라, Geneve 터널을 통해 Network 노드로 패킷을 넘기기 때문에 물리망과 매핑되는 `provnet-<uuid>` 포트가 생성될 필요가 없다. Network 노드가 외부 진입점(Gateway Chassis) 역할을 담당하므로, Provider 네트워크의 localnet 포트는 오직 Network 노드에만 존재하면 된다.  
+→ 인스턴스를 provider 네트워크에 직접 붙이려면 인스턴스가 올라가는 Compute 노드에 `provnet` 포트가 존재해야 외부 물리망과 포트 바인딩이 가능한데, 지금은 Self-Service 네트워크를 구축하는 것이 목표이므로 인스턴스는 Self-Service 망에만 붙이기로 했다.
+
+<img
+  className="mx-auto"
+  style={{ width: '400px', maxWidth: '100%' }}
+  src="/static/images/Blog/network-topology.png"
+/>
+위 이미지는 구축된 네트워크 토폴로지이고, VMNET01의 인스턴스까지 통신이 잘 되는 것을 확인할 수 있었다.{' '}
+
+왜 이 문제를 오래 붙잡고 있었는지 돌아보면, 가지고 있는 개념이 명확하지 않았기 때문이다. OVN 환경에서는 NIC를 분리해 줘야 한다는 것을 실제 장애 상황을 겪으며 뒤늦게 깨달았고, `ovn-encap-ip`와 `provnet-<uuid>` 포트의 역할을 정확히 이해하지 못했으며, 라우터 게이트웨이까지 통신이 잘 되려면 Geneve 터널이 구축되어야 한다는 것을 알지 못했다.
+
+### 💡 오픈스택 구축 과정에서 배운 점
+
+위와 같은 시행착오를 겪으며 그동안 머릿속에서 흐릿하게만 알고 있던 구조들이 실제 동작의 흐름 속에서 명확히 다져지는 경험을 할 수 있었다. 오버레이 네트워크가 어떻게 트래픽을 전달하는지, 각 구성 요소가 어떤 순서로 패킷을 처리하는지, 그리고 작은 설정 하나가 전체 흐름에 어떤 영향을 주는지를 직접 확인하며 클라우드 아키텍처 전반에 대한 이해를 한층 더 깊게 확장했다.
+
+결국 클라우드 인프라는 논리 구성과 실제 데이터 경로가 정교하게 맞물려야 비로소 하나의 시스템으로 작동하는데, 오픈스택을 구축하면서 그 전체적인 흐름을 배울 수 있었다. 앞으로 더 복잡한 구조나 대규모 환경을 다루게 되더라도, 이번에 익힌 흐름과 사고방식이 좋은 기반이 되어줄 것 같다.
