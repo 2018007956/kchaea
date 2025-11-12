@@ -63,13 +63,13 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
           </Head>
           {isDevelopment && isSocket && <ClientReload />}
           {/* Google tag (gtag.js) */}
-          <Script src="https://www.googletagmanager.com/gtag/js?id=G-8CNYBFEQT8" />
+          <Script src="https://www.googletagmanager.com/gtag/js?id=G-JW8CTS8JYC" />
           <Script id="ga-init" strategy="afterInteractive">
             {`
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', 'G-8CNYBFEQT8');
+              gtag('config', 'G-JW8CTS8JYC');
             `}
           </Script>
           {/* Google Tag Manager */}
