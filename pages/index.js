@@ -24,12 +24,11 @@ export default function Home({ posts }) {
         <div className="mb-12 flex flex-col items-center gap-x-12 xl:flex-row">
           <div className="pt-6">
             <h1 className="pb-6 text-2xl font-extrabold leading-10 tracking-tight text-gray-900 dark:text-gray-100 sm:text-3xl sm:leading-12 md:text-4xl md:leading-14">
-              안녕하세요,
-              <br />
+              안녕하세요, {/* <br /> */}
               <span className="text-primary-color-500 dark:text-primary-color-dark-500">
-                기록하는 개발자
+                김채아
               </span>{' '}
-              김채아입니다
+              입니다
             </h1>
             <h2 className="prose pt-5 text-base text-gray-600 dark:text-gray-300">
               {`저의 개인 블로그에 오신 것을 환영합니다. 저는 자동화를 통해 효율적인 시스템을 구축하는 일에 관심이 있으며, 클라우드 기술에 지속적인 관심을 가지고 있습니다. `}
