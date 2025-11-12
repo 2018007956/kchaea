@@ -121,6 +121,16 @@ class MyDocument extends Document {
           />
         </Head>
         <body className="bg-white text-black antialiased dark:bg-background-color dark:text-white">
+          {/* Google Tag Manager (noscript) */}
+          <noscript
+            dangerouslySetInnerHTML={{
+              __html: `
+                <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KC3RH3JQ"
+                        height="0" width="0"
+                        style="display:none;visibility:hidden"></iframe>
+              `,
+            }}
+          />
           <Main />
           <NextScript />
         </body>
