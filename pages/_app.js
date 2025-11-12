@@ -5,6 +5,7 @@ import 'katex/dist/katex.css'
 import '@fontsource/inter/variable-full.css'
 import { ThemeProvider } from 'next-themes'
 import Head from 'next/head'
+import Script from 'next/script'
 import Router from 'next/router'
 import NProgress from 'nprogress'
 import siteMetadata from '@/data/siteMetadata'
@@ -61,7 +62,16 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
             <meta content="width=device-width, initial-scale=1" name="viewport" />
           </Head>
           {isDevelopment && isSocket && <ClientReload />}
-          <Analytics />
+          {/* Google tag (gtag.js) */}
+          <Script src="https://www.googletagmanager.com/gtag/js?id=G-8CNYBFEQT8" />
+          <Script id="ga-init" strategy="afterInteractive">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-8CNYBFEQT8');
+            `}
+          </Script>
           <LayoutWrapper>
             <Component {...pageProps} />
           </LayoutWrapper>
