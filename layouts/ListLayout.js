@@ -1,22 +1,18 @@
 import Link from '@/components/Link'
-import Tag from '@/components/Tag'
 import Image from '@/components/Image'
 import { useState } from 'react'
-import Pagination from '@/components/Pagination'
 import formatDate from '@/lib/utils/formatDate'
 import ViewCounter from '@/components/ViewCounter'
 import siteMetadata from '@/data/siteMetadata'
 
-export default function ListLayout({ posts, title, initialDisplayPosts = [], pagination }) {
+export default function ListLayout({ posts, title }) {
   const [searchValue, setSearchValue] = useState('')
   const filteredBlogPosts = posts.filter((frontMatter) => {
     const searchContent = frontMatter.title + frontMatter.summary + frontMatter.tags.join(' ')
     return searchContent.toLowerCase().includes(searchValue.toLowerCase())
   })
 
-  // If initialDisplayPosts exist, display it if no searchValue is specified
-  const displayPosts =
-    initialDisplayPosts.length > 0 && !searchValue ? initialDisplayPosts : filteredBlogPosts
+  const displayPosts = filteredBlogPosts
 
   return (
     <>
@@ -49,11 +45,13 @@ export default function ListLayout({ posts, title, initialDisplayPosts = [], pag
             </svg>
           </div>
         </div>
-        <div className="grid grid-cols-1 gap-8 py-12 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-8 py-12 md:grid-cols-2">
           {!filteredBlogPosts.length && 'No posts found.'}
           {displayPosts.map((frontMatter) => {
-            const { slug, date, title, summary, tags, images } = frontMatter
-            const imageUrl = images && images.length > 0 ? images[0] : siteMetadata.socialBanner
+            const { slug, date, title, summary, tags, images, firstImage } = frontMatter
+            // Priority: frontmatter images > firstImage from content > default banner
+            const imageUrl =
+              images && images.length > 0 ? images[0] : firstImage || siteMetadata.socialBanner
 
             return (
               <Link
@@ -62,7 +60,7 @@ export default function ListLayout({ posts, title, initialDisplayPosts = [], pag
                 className="group relative flex transform cursor-pointer flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition duration-200 hover:scale-105 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800"
               >
                 {/* Image */}
-                <div className="relative h-48 w-full overflow-hidden">
+                <div className="relative h-64 w-full overflow-hidden">
                   <Image
                     src={imageUrl}
                     alt={title}
@@ -117,9 +115,6 @@ export default function ListLayout({ posts, title, initialDisplayPosts = [], pag
           })}
         </div>
       </div>
-      {pagination && pagination.totalPages > 1 && !searchValue && (
-        <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />
-      )}
     </>
   )
 }
