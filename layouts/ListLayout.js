@@ -45,7 +45,7 @@ export default function ListLayout({ posts, title }) {
             </svg>
           </div>
         </div>
-        <div className="grid grid-cols-1 gap-8 py-12 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 py-12 sm:grid-cols-2 lg:grid-cols-3">
           {!filteredBlogPosts.length && 'No posts found.'}
           {displayPosts.map((frontMatter) => {
             const { slug, date, title, summary, tags, images, firstImage } = frontMatter
@@ -60,7 +60,7 @@ export default function ListLayout({ posts, title }) {
                 className="group relative flex transform cursor-pointer flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition duration-200 hover:scale-105 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800"
               >
                 {/* Image */}
-                <div className="relative h-64 w-full overflow-hidden">
+                <div className="relative h-48 w-full overflow-hidden">
                   <Image
                     src={imageUrl}
                     alt={title}
@@ -69,44 +69,39 @@ export default function ListLayout({ posts, title }) {
                   />
                   {/* Tags overlay */}
                   {tags && tags.length > 0 && (
-                    <div className="absolute top-3 left-3 flex flex-wrap gap-2">
-                      {tags.slice(0, 2).map((tag) => (
+                    <div className="absolute top-2 left-2 flex flex-wrap gap-1.5">
+                      {tags.map((tag) => (
                         <span
                           key={tag}
-                          className="rounded-md bg-pink-500 bg-opacity-90 px-2 py-1 text-xs font-medium uppercase text-white"
+                          className="rounded-md bg-pink-500 bg-opacity-90 px-1.5 py-0.5 text-[10px] font-medium uppercase text-white"
                         >
                           {tag}
                         </span>
                       ))}
-                      {tags.length > 2 && (
-                        <span className="rounded-md bg-pink-500 bg-opacity-90 px-2 py-1 text-xs font-medium uppercase text-white">
-                          +{tags.length - 2}
-                        </span>
-                      )}
                     </div>
                   )}
                 </div>
 
                 {/* Content */}
-                <div className="flex flex-1 flex-col p-5">
-                  <div className="mb-2 text-sm font-normal text-gray-500 dark:text-gray-400">
+                <div className="flex flex-1 flex-col p-4">
+                  <div className="mb-1.5 text-xs font-normal text-gray-500 dark:text-gray-400">
                     <time dateTime={date}>{formatDate(date)}</time>
                     {' • '}
                     <ViewCounter className="mx-1" slug={slug} />
                     views
                   </div>
 
-                  <h2 className="mb-2 text-xl font-bold leading-7 tracking-tight text-gray-900 transition duration-500 ease-in-out group-hover:text-primary-500 dark:text-gray-100 dark:group-hover:text-primary-500">
+                  <h2 className="mb-2 text-lg font-bold leading-6 tracking-tight text-gray-900 transition duration-500 ease-in-out group-hover:text-primary-500 dark:text-gray-100 dark:group-hover:text-primary-500">
                     {title}
                   </h2>
 
                   {summary && (
-                    <p className="line-clamp-2 mb-4 flex-1 text-sm text-gray-600 dark:text-gray-400">
+                    <p className="line-clamp-2 mb-3 flex-1 text-xs text-gray-600 dark:text-gray-400">
                       {summary}
                     </p>
                   )}
 
-                  <div className="mt-auto text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <div className="mt-auto text-xs font-medium text-gray-700 dark:text-gray-300">
                     {siteMetadata.author}
                   </div>
                 </div>
