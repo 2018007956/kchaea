@@ -86,9 +86,6 @@ export default function ListLayout({ posts, title }) {
                 <div className="flex flex-1 flex-col p-4">
                   <div className="mb-1.5 text-xs font-normal text-gray-500 dark:text-gray-400">
                     <time dateTime={date}>{formatDate(date)}</time>
-                    {' • '}
-                    <ViewCounter className="mx-1" slug={slug} />
-                    views
                   </div>
 
                   <h2 className="mb-2 text-lg font-bold leading-6 tracking-tight text-gray-900 transition duration-500 ease-in-out group-hover:text-primary-500 dark:text-gray-100 dark:group-hover:text-primary-500">
@@ -100,10 +97,6 @@ export default function ListLayout({ posts, title }) {
                       {summary}
                     </p>
                   )}
-
-                  <div className="mt-auto text-xs font-medium text-gray-700 dark:text-gray-300">
-                    {siteMetadata.author}
-                  </div>
                 </div>
               </Link>
             )
