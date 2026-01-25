@@ -1,7 +1,7 @@
 ---
 name: Chaea Kim
 avatar: /static/images/avatar.png
-occupation: XXX Engineer
+occupation: Cloud Engineer
 company: XXX
 email: chaea11s0@gmail.com
 linkedin: https://www.linkedin.com/in/kchaea/
