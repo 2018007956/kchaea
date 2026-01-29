@@ -1,0 +1,74 @@
+---
+title: IPAM 이란
+date: '2026-01-12'
+tags: [Network, Dev]
+draft: false
+summary: IPAM 개념, 필요성, 핵심 기능을 정리
+---
+
+<img className="inline" src="/static/images/Blog/2026/ipam-homescreen.png" />
+
+IPAM(IP Address Management)은 IP 주소, 서브넷, VLAN 등의 네트워크 자원을 체계적으로 기록하고
+할당과 회수를 자동화하여 네트워크 관리자가 현재 사용 상태를 한눈에 파악하고 제어할 수 있게 해주는 관리 시스템이다. 네트워크 규모가 커질수록 수작업 스프레드시트는 쉽게 틀리고, 중복 할당이나 유휴 자원 누락이 발생한다. IPAM은 이러한 오류를 줄이고 운영 효율성을 높여준다.
+
+요약하자면, IPAM은 "네트워크 자원의 생애주기를 관리하는 시스템"이다.
+정확한 기록과 자동화 연동이 핵심이며, 규모가 커질수록 필요성이 급격히 올라간다.
+
+## 왜 쓰는가
+- 중복 할당 방지: 같은 IP를 다른 장비에 할당하는 실수를 예방
+- 가시성 향상: 현재 어떤 IP가 누구에게, 어떤 장비에, 어떤 용도로 쓰이는지 즉시 확인
+- 변경 이력 추적: 누가 언제 어떤 변경을 했는지 기록해 문제 원인을 빠르게 파악
+- 자동화 기반: 프로비저닝, 네트워크 설정, DNS 갱신 등과 연계해 운영 자동화
+- 보안/감사 대응: 자산 현황과 변경 로그가 정리되어 감사 대응이 수월
+
+## 언제 쓰는가
+- 서버/VM/컨테이너/IoT 등 IP 소비 대상이 많아졌을 때
+- 여러 팀이 동일한 네트워크 자원을 공유할 때
+- 멀티 사이트/멀티 리전에 걸쳐 서브넷이 분산될 때
+- DHCP/DNS와 연동해 자동화 워크플로를 구축할 때
+- 규정 준수나 감사 요구가 있는 조직 환경
+
+## 기능명세서
+아래는 IPAM을 구현하기 위해 주소/서브넷/로그 기준으로 정리한 기능 명세다.
+
+| Category | Depth1 | Depth2 | Depth3 | 중요도 | 설명 | 비고 |
+| --- | --- | --- | --- | --- | --- | --- |
+| Users | 권한 조회 |  |  | 중 | 사용자 권한 조회 | Keycloak 연동 |
+| Search | 통합 검색 |  |  | 상 | IP주소, CIDR, MAC주소, VLAN, 도메인, 호스트명, Zone |  |
+| Addresses | 목록 조회 | 전체 조회 |  | 상 | IP 목록 조회, 필터링/페이지네이션 지원 | status, subnetId 필터 |
+| Addresses | 상세 조회 |  |  | 중 | IP 상세 정보 조회 |  |
+| Addresses | 검색 | 주소 검색 |  | 상 | IP 주소로 검색 | ipv4 단일 주소, subnet 대역, 호스트명, domain, zone, esm, mac, vlan, security level, public/private, 제조사/모델명, Location |
+| Addresses | 예약 | 단건 예약 |  | 상 | IP 주소 정보 수동 예약 | 중복 검증 필수 |
+| Addresses | 예약 | 대량 예약 |  | 중 | CSV 업로드 또는 범위 지정 일괄 예약 |  |
+| Addresses | 예약 취소 |  |  | 중 | IP 레코드 삭제 |  |
+| Subnets | 목록 조회 | 전체 조회 |  | 상 | 서브넷 목록 조회 | zone, vlan |
+| Subnets | 상세 조회 |  |  | 상 | 서브넷 상세 정보 + 사용률 통계 |  |
+| Subnets | 생성 |  |  | 상 | 새 서브넷 생성 (network, mask, gateway) | CIDR 형식 검증 |
+| Subnets | Merge |  |  | 중 | 서브넷 결합 | 서브넷 마스크 일치 여부 확인 |
+| Subnets | Split |  |  | 중 | 서브넷 분할 |  |
+| Subnets | 삭제 |  |  | 중 | 서브넷 삭제 | 하위 IP 있으면 불가 |
+| Subnets | 사용률 조회 |  |  | 상 | 서브넷 내 IP 사용 현황 (used/available/reserved) | usage 값 조회 |
+| Subnets | Export |  |  | 하 |  | subnet 주소, zone, location, vlan, 대역 선택 |
+| Logs | 목록 조회 |  |  | 상 | 감사 로그 목록 조회, 필터링/페이지네이션 |  |
+| Logs | 상세 조회 |  |  | 중 | 로그 상세 정보 조회 |  |
+| Logs | 검색 | 사용자별 |  | 중 | 특정 사용자의 활동 로그 조회 |  |
+| Logs | 검색 | 액션별 |  | 중 | 특정 액션별 로그 조회 | create/update/delete |
+| Logs | 검색 | 기간별 |  | 중 | 특정 기간 내 로그 조회 |  |
+| Logs | 검색 | 엔티티별 |  | 중 | 특정 엔티티 타입/ID별 로그 조회 |  |
+| Logs | 내보내기 |  |  | 하 | 로그 CSV 다운로드 |  |
+
+## 개발 환경
+IPAM을 직접 구현해보기 위해 아래와 같은 개발 환경을 세팅했다.
+
+### Backend
+1. Ubuntu 24.04
+2. [Openjdk@17](https://velog.io/@little-chicken/Java-macOS%EC%97%90-Homebrew%EB%A5%BC-%ED%86%B5%ED%95%B4-JDK-%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0)
+3. Springboot 3.5.9
+4. [Mysql 8.0.35](https://datarian.io/blog/installing-mysql-on-a-mac)
+
+### Frontend
+Vite + React + TypeScript  
+피그마로 초기 디자인 구성하고 cursor로 이식하여 작업 진행
+1. `npm create vite@latest`로 vite 환경 먼저 세팅
+2. Figma로 생성된 src/ 파일 가져오기
+3. vite로 생성된 `package.json`위에서 figma에서 생성된 것을 참고하여 필요한 의존성 주입

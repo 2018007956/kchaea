@@ -64,7 +64,7 @@ export default function ListLayout({ posts, title }) {
                   <Image
                     src={imageUrl}
                     alt={title}
-                    fill
+                    layout="fill"
                     className="object-cover transition duration-300 group-hover:scale-110"
                   />
                   {/* Tags overlay */}
