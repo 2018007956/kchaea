@@ -4,6 +4,8 @@ import ScrollTop from '@/components/ScrollTop'
 
 const ScrollTopAndComment = () => {
   const [show, setShow] = useState(false)
+  // Check if Lyket API key is available (NEXT_PUBLIC_ vars are available in client components)
+  const hasLyketApiKey = process.env.NEXT_PUBLIC_LYKET_API_KEY
 
   useEffect(() => {
     const handleWindowScroll = () => {
@@ -17,13 +19,17 @@ const ScrollTopAndComment = () => {
 
   return (
     <>
-      <div
-        className={`fixed right-8 bottom-9 hidden flex-col gap-6 ${show ? 'md:flex' : 'md:hidden'}`}
-      >
-        <button className="mb-16">
-          <ClapButton id="diy-fish-holder" namespace="post" hideCounterIfLessThan={1} />
-        </button>
-      </div>
+      {hasLyketApiKey && (
+        <div
+          className={`fixed right-8 bottom-9 hidden flex-col gap-6 ${
+            show ? 'md:flex' : 'md:hidden'
+          }`}
+        >
+          <button className="mb-16">
+            <ClapButton id="diy-fish-holder" namespace="post" hideCounterIfLessThan={1} />
+          </button>
+        </div>
+      )}
       <ScrollTop />
     </>
   )

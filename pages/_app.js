@@ -52,41 +52,50 @@ const defaultTheme = {
 }
 
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
+  const lyketApiKey = process.env.NEXT_PUBLIC_LYKET_API_KEY
+  const appContent = (
+    <ThemeProvider attribute="class" defaultTheme={siteMetadata.theme}>
+      <ProgressBar bgcolor="#DE1D8D" />
+      <ScrollTop />
+      <Head>
+        <meta content="width=device-width, initial-scale=1" name="viewport" />
+      </Head>
+      {isDevelopment && isSocket && <ClientReload />}
+      {/* Google tag (gtag.js) */}
+      <Script src="https://www.googletagmanager.com/gtag/js?id=G-JW8CTS8JYC" />
+      <Script id="ga-init" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-JW8CTS8JYC');
+        `}
+      </Script>
+      {/* Google Tag Manager */}
+      <Script id="gtm-init" strategy="afterInteractive">
+        {`
+          (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+          'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+          })(window,document,'script','dataLayer','GTM-KC3RH3JQ');
+        `}
+      </Script>
+      <LayoutWrapper>
+        <Component {...pageProps} />
+      </LayoutWrapper>
+    </ThemeProvider>
+  )
+
   return (
     <SessionProvider session={session}>
-      <Provider apiKey={process.env.NEXT_PUBLIC_LYKET_API_KEY} theme={defaultTheme}>
-        <ThemeProvider attribute="class" defaultTheme={siteMetadata.theme}>
-          <ProgressBar bgcolor="#DE1D8D" />
-          <ScrollTop />
-          <Head>
-            <meta content="width=device-width, initial-scale=1" name="viewport" />
-          </Head>
-          {isDevelopment && isSocket && <ClientReload />}
-          {/* Google tag (gtag.js) */}
-          <Script src="https://www.googletagmanager.com/gtag/js?id=G-JW8CTS8JYC" />
-          <Script id="ga-init" strategy="afterInteractive">
-            {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-JW8CTS8JYC');
-            `}
-          </Script>
-          {/* Google Tag Manager */}
-          <Script id="gtm-init" strategy="afterInteractive">
-            {`
-              (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-              'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-              })(window,document,'script','dataLayer','GTM-KC3RH3JQ');
-            `}
-          </Script>
-          <LayoutWrapper>
-            <Component {...pageProps} />
-          </LayoutWrapper>
-        </ThemeProvider>
-      </Provider>
+      {lyketApiKey ? (
+        <Provider apiKey={lyketApiKey} theme={defaultTheme}>
+          {appContent}
+        </Provider>
+      ) : (
+        appContent
+      )}
     </SessionProvider>
   )
 }
