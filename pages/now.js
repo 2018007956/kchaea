@@ -133,14 +133,14 @@ export default function Now(currentlyReading) {
       <div>
         <div className="my-2">
           <h3>Where am I and what am I doing?</h3>
-          <div className=" mt-4 mb-6 text-xs text-neutral-700 dark:text-neutral-400">
+          <div className=" mb-6 mt-4 text-xs text-neutral-700 dark:text-neutral-400">
             This page was automatically updated @ {date}-{month}-{year} {hour}:{minute}:{second}
           </div>
         </div>
         {/* Misc */}
         <div>
           <div className="flex justify-between gap-5">
-            <div className="mt-2 mb-10 w-1/2 rounded-md border border-gray-600 p-1 text-sm dark:border-gray-200">
+            <div className="mb-10 mt-2 w-1/2 rounded-md border border-gray-600 p-1 text-sm dark:border-gray-200">
               <span className="ml-2 font-semibold">Location:</span> <span>Seoul, Korea</span>
               <br />
               <span className="ml-2 font-semibold">Weather:</span>{' '}
@@ -158,7 +158,7 @@ export default function Now(currentlyReading) {
               </span>
             </div>
 
-            <div className="mt-2 mb-10 w-1/2 rounded-md border border-gray-600 p-1 text-sm dark:border-gray-200">
+            <div className="mb-10 mt-2 w-1/2 rounded-md border border-gray-600 p-1 text-sm dark:border-gray-200">
               <span className="ml-2 font-semibold">Reading:</span>{' '}
               <a
                 href={currentlyReadingData[0].url}
@@ -175,7 +175,7 @@ export default function Now(currentlyReading) {
           </div>
 
           <div className="-my-6 flex justify-between gap-5">
-            <div className="mt-2 mb-10 w-1/2 rounded-md border border-gray-600 p-1 text-sm dark:border-gray-200">
+            <div className="mb-10 mt-2 w-1/2 rounded-md border border-gray-600 p-1 text-sm dark:border-gray-200">
               <span className="ml-2 font-semibold">Date:</span>{' '}
               <span>{TodayDate.format('DD/MM/YYYY')}</span>
               <br />
@@ -186,7 +186,7 @@ export default function Now(currentlyReading) {
               </span>
             </div>
 
-            <div className="mt-2 mb-10 w-1/2 rounded-md border border-gray-600 p-1 text-sm dark:border-gray-200">
+            <div className="mb-10 mt-2 w-1/2 rounded-md border border-gray-600 p-1 text-sm dark:border-gray-200">
               <span className="ml-2 font-semibold">Listening:</span>{' '}
               <span>
                 {data?.songUrl ? (

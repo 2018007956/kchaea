@@ -21,7 +21,7 @@ const ScrollTopAndComment = () => {
     <>
       {hasLyketApiKey && (
         <div
-          className={`fixed right-8 bottom-9 hidden flex-col gap-6 ${
+          className={`fixed bottom-9 right-8 hidden flex-col gap-6 ${
             show ? 'md:flex' : 'md:hidden'
           }`}
         >

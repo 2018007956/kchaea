@@ -14,7 +14,7 @@ const NowReading = ({ title, description, href, rating, showLink = true }) =>
         <div className="p-6">
           <h4 className="mb-3 text-xl font-bold leading-8 tracking-tight text-black dark:text-white">
             {title}
-            <FiExternalLink className="ml-1 -mt-0.5 inline-block h-5 w-5" />
+            <FiExternalLink className="-mt-0.5 ml-1 inline-block h-5 w-5" />
           </h4>
           <p className="prose mb-3 max-w-none text-gray-500 dark:text-gray-400">
             {description} (Currently Reading)

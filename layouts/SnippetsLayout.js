@@ -19,7 +19,7 @@ export default function SnippetsLayout({ posts, title, initialDisplayPosts = [],
   return (
     <>
       <div className="mx-auto max-w-6xl divide-y divide-gray-400">
-        <div className="space-y-2 pt-6 pb-8 md:space-y-5">
+        <div className="space-y-2 pb-8 pt-6 md:space-y-5">
           <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
             {title}
           </h1>
@@ -59,7 +59,7 @@ export default function SnippetsLayout({ posts, title, initialDisplayPosts = [],
               >
                 <div className="absolute bottom-0 left-0 h-0.5 w-full origin-left scale-x-0 transform bg-primary-500 duration-200 group-hover:scale-x-100" />
                 <div className="absolute bottom-0 left-0 h-full w-0.5 origin-bottom scale-y-0 transform bg-primary-500 duration-200 group-hover:scale-y-100" />
-                <div className="absolute top-0 left-0 h-0.5 w-full origin-right scale-x-0 transform bg-primary-500 duration-200 group-hover:scale-x-100" />
+                <div className="absolute left-0 top-0 h-0.5 w-full origin-right scale-x-0 transform bg-primary-500 duration-200 group-hover:scale-x-100" />
                 <div className="absolute bottom-0 right-0 h-full w-0.5 origin-top scale-y-0 transform bg-primary-500 duration-200 group-hover:scale-y-100" />
                 <div className="bg-day dark:bg-night relative space-y-2 rounded-2xl p-4">
                   <article>
@@ -72,7 +72,7 @@ export default function SnippetsLayout({ posts, title, initialDisplayPosts = [],
                           {title}
                         </Link>
                       </h2>
-                      <div className="prose prose-base max-w-none text-gray-500 dark:text-gray-400 sm:prose-lg">
+                      <div className="prose prose-base max-w-none text-gray-500 sm:prose-lg dark:text-gray-400">
                         {summary}
                       </div>
 

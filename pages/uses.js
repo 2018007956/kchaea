@@ -8,14 +8,14 @@ export default function Uses() {
     <>
       <PageSEO title={`Uses - ${siteMetadata.author}`} description="What I use" />
       <div className="mx-auto max-w-4xl divide-y divide-gray-200 dark:divide-gray-700">
-        <div className="space-y-2 pt-6 pb-8 md:space-y-5">
+        <div className="space-y-2 pb-8 pt-6 md:space-y-5">
           <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
             Uses
           </h1>
           <p className="text-md leading-7 text-gray-500 dark:text-gray-400">
             제가 매일 사용하는 소프트웨어와 하드웨어를 모아둔 목록입니다.
           </p>
-          <div className="mt-5 mb-3 text-xs text-gray-500 dark:text-gray-400">
+          <div className="mb-3 mt-5 text-xs text-gray-500 dark:text-gray-400">
             참고: 이 페이지에는 제품을 구매하거나 다운로드할 수 있는 링크가 포함되어 있습니다. 해당
             링크를 통해 구매하시더라도 저는 어떠한 금전적 보상도 받지 않습니다.
           </div>

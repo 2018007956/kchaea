@@ -123,7 +123,7 @@ export default function CommandPalette({ navigation }) {
                 </Combobox.Options>
               )}
               {query && filterednavigation.length === 0 && (
-                <p className="py-4 px-12 text-sm text-gray-500 ">no results found</p>
+                <p className="px-12 py-4 text-sm text-gray-500 ">no results found</p>
               )}
             </Combobox>
           </Transition.Child>

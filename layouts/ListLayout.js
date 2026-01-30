@@ -4,20 +4,23 @@ import { useState } from 'react'
 import formatDate from '@/lib/utils/formatDate'
 import ViewCounter from '@/components/ViewCounter'
 import siteMetadata from '@/data/siteMetadata'
+import Pagination from '@/components/Pagination'
 
-export default function ListLayout({ posts, title }) {
+export default function ListLayout({ posts, title, initialDisplayPosts = [], pagination }) {
   const [searchValue, setSearchValue] = useState('')
   const filteredBlogPosts = posts.filter((frontMatter) => {
     const searchContent = frontMatter.title + frontMatter.summary + frontMatter.tags.join(' ')
     return searchContent.toLowerCase().includes(searchValue.toLowerCase())
   })
 
-  const displayPosts = filteredBlogPosts
+  // If initialDisplayPosts exist, display it if no searchValue is specified
+  const displayPosts =
+    initialDisplayPosts.length > 0 && !searchValue ? initialDisplayPosts : filteredBlogPosts
 
   return (
     <>
       <div className="mx-auto max-w-6xl">
-        <div className="space-y-2 pt-6 pb-8 md:space-y-5">
+        <div className="space-y-2 pb-8 pt-6 md:space-y-5">
           <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
             {title}
           </h1>
@@ -69,7 +72,7 @@ export default function ListLayout({ posts, title }) {
                   />
                   {/* Tags overlay */}
                   {tags && tags.length > 0 && (
-                    <div className="absolute top-2 left-2 flex flex-wrap gap-1.5">
+                    <div className="absolute left-2 top-2 flex flex-wrap gap-1.5">
                       {tags.map((tag) => (
                         <span
                           key={tag}
@@ -93,7 +96,7 @@ export default function ListLayout({ posts, title }) {
                   </h2>
 
                   {summary && (
-                    <p className="line-clamp-2 mb-3 flex-1 text-xs text-gray-600 dark:text-gray-400">
+                    <p className="mb-3 line-clamp-2 flex-1 text-xs text-gray-600 dark:text-gray-400">
                       {summary}
                     </p>
                   )}
@@ -103,6 +106,9 @@ export default function ListLayout({ posts, title }) {
           })}
         </div>
       </div>
+      {pagination && pagination.totalPages > 1 && !searchValue && (
+        <Pagination currentPage={pagination.currentPage} totalPages={pagination.totalPages} />
+      )}
     </>
   )
 }

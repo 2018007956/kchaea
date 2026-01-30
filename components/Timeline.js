@@ -11,14 +11,14 @@ import { TbDeviceDesktopAnalytics } from 'react-icons/tb'
 export default function Timeline() {
   return (
     <div>
-      <ol className="relative mt-6 ml-6 border-l border-zinc-400 dark:border-gray-800 ">
+      <ol className="relative ml-6 mt-6 border-l border-zinc-400 dark:border-gray-800 ">
         <li className="mb-4 ml-8 rounded-md border border-gray-100 bg-white  px-4  py-4 shadow-sm shadow-gray-300 dark:border-zinc-900 dark:bg-zinc-900 dark:shadow-none">
           <span className=" absolute -left-3 flex h-6 w-6 animate-pulse items-center justify-center rounded-full bg-blue-200 ring-8 ring-white dark:bg-green-900 dark:ring-gray-900">
             <FaBlackTie className="animate-none" />
           </span>
           <h3 className="flex items-center text-base  font-semibold text-gray-900 dark:text-white">
             Applying for Jobs
-            <span className="mr-2 ml-3 rounded bg-blue-100 px-2.5 py-0.5 text-sm font-medium text-blue-800 dark:bg-blue-200 dark:text-blue-800">
+            <span className="ml-3 mr-2 rounded bg-blue-100 px-2.5 py-0.5 text-sm font-medium text-blue-800 dark:bg-blue-200 dark:text-blue-800">
               Present
             </span>
           </h3>

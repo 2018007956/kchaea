@@ -8,7 +8,7 @@ export default function Quotes() {
     <>
       <PageSEO title={`Quotes - ${siteMetadata.author}`} description="Some of my favorite quotes" />
       <div className="mx-auto max-w-2xl">
-        <div className="space-y-2 pt-6 pb-8 md:space-y-5">
+        <div className="space-y-2 pb-8 pt-6 md:space-y-5">
           <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-5xl md:leading-14">
             Quotes
           </h1>
@@ -37,7 +37,7 @@ export default function Quotes() {
               <blockquote className="rounded-md bg-gray-200 p-6 dark:bg-gray-800">
                 <div className="text-md relative md:flex-grow">
                   <svg
-                    className="absolute top-0 left-0 h-8 w-8 -translate-x-9 -translate-y-9 transform text-gray-500 dark:text-gray-300"
+                    className="absolute left-0 top-0 h-8 w-8 -translate-x-9 -translate-y-9 transform text-gray-500 dark:text-gray-300"
                     fill="currentColor"
                     viewBox="0 0 32 32"
                     aria-hidden="true"

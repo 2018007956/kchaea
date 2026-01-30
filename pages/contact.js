@@ -10,7 +10,7 @@ const Contact = () => {
         <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-5xl md:leading-14">
           Contact
         </h1>
-        <div className="pt-10 pb-8">
+        <div className="pb-8 pt-10">
           <ul className="font-semi-bold flex flex-col space-y-4">
             <ContactLink href="mailto:chaea11s0@gmail.com" title="gmail" icon="chaea11s0" />
             <ContactLink href="https://github.com/2018007956" title="github" icon="2018007956" />
