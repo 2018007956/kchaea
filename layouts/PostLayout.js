@@ -20,6 +20,7 @@ import {
 import { SocialIcon } from 'react-social-icons'
 import { HiOutlinePencil, HiOutlineClock, HiOutlineEye } from 'react-icons/hi'
 import { BsCalendarDate } from 'react-icons/bs'
+import { FiExternalLink } from 'react-icons/fi'
 
 const editUrl = (fileName) => `${siteMetadata.siteRepo}/blob/master/data/blog/${fileName}`
 
@@ -80,18 +81,37 @@ export default function PostLayout({ frontMatter, authorDetails, next, prev, chi
               <dd>
                 <ul className="flex justify-center space-x-8 sm:space-x-12 xl:block xl:space-x-0 xl:space-y-8">
                   {authorDetails.map((author) => (
-                    <li className="flex items-center space-x-2" key={author.name}>
-                      {author.avatar && (
-                        <Image
-                          src={author.avatar}
-                          width="38px"
-                          height="38px"
-                          alt="avatar"
-                          className="h-10 w-10 rounded-full"
-                          placeholder="blur"
-                          blurDataURL="/static/images/SVG-placeholder.png"
-                        />
-                      )}
+                    <li className="flex items-center" key={author.name}>
+                      <div className="flex items-center">
+                        {author.avatar && (
+                          <Image
+                            src={author.avatar}
+                            width="44px"
+                            height="44px"
+                            alt="avatar"
+                            className="h-11 w-11 rounded-full"
+                            placeholder="blur"
+                            blurDataURL="/static/images/SVG-placeholder.png"
+                          />
+                        )}
+                        <div className="ml-5">
+                          <div className="leading-tight">
+                            <div className="text-base font-bold text-gray-900 dark:text-gray-100">
+                              {author.name || 'Chaea Kim'}
+                            </div>
+                          </div>
+                          <div className="leading-tight">
+                            <Link
+                              href="/contact"
+                              className="text-base font-medium text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                              aria-label="Go to contact page"
+                            >
+                              @Contact
+                              <FiExternalLink className="-mt-0.5 ml-1 inline-block h-4 w-4" />
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
                     </li>
                   ))}
                 </ul>
