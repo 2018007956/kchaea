@@ -201,6 +201,10 @@ input:-webkit-autofill:focus {
   outline: none;
 }
 
+.year-accordion[open] .year-accordion__chevron {
+  transform: rotate(180deg);
+}
+
 .edgeblue {
   position: absolute;
   top: 0;
