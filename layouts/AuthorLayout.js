@@ -126,16 +126,6 @@ export default function AuthorLayout({ children, frontMatter }) {
               로 편하게 연락 주세요.
             </p>
             <br />
-            <p>
-              <Link
-                href={'/uses'}
-                className="special-underline no-underline hover:text-gray-100 dark:text-gray-100 hover:dark:text-gray-100"
-              >
-                여기
-              </Link>
-              에서 제가 매일 사용하는 툴들을 확인하실 수 있습니다.
-            </p>
-            <br />
             <div>
               <h1>Experience</h1>
               <div className="max-w-none pb-8 pt-8 xl:col-span-2">
