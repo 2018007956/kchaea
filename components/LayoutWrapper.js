@@ -6,11 +6,13 @@ import Footer from './Footer'
 import { navigation } from '@/data/nav'
 import CommandPalette from './CommandPalette'
 import ThemeSwitch from './ThemeSwitch'
-import Typewriter from 'typewriter-effect'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import DropMenu from './DropMenu.js'
 // import Logo from '@/data/logo.svg'
 // import MobileNav from './MobileNav'
+
+const Typewriter = dynamic(() => import('typewriter-effect'), { ssr: false })
 
 const LayoutWrapper = ({ children }) => {
   const router = useRouter()

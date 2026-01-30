@@ -6,16 +6,18 @@ import '@fontsource/inter/variable-full.css'
 import { ThemeProvider } from 'next-themes'
 import Head from 'next/head'
 import Script from 'next/script'
+import dynamic from 'next/dynamic'
 import Router from 'next/router'
 import NProgress from 'nprogress'
 import siteMetadata from '@/data/siteMetadata'
 import Analytics from '@/components/analytics'
 import LayoutWrapper from '@/components/LayoutWrapper'
 import { ClientReload } from '@/components/ClientReload'
-import ProgressBar from 'react-scroll-progress-bar'
 import ScrollTop from '@/components/ScrollTop'
 import { SessionProvider } from 'next-auth/react'
 import { Provider } from '@lyket/react'
+
+const ProgressBar = dynamic(() => import('react-scroll-progress-bar'), { ssr: false })
 
 const isDevelopment = process.env.NODE_ENV === 'development'
 const isSocket = process.env.SOCKET

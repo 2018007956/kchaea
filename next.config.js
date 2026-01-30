@@ -92,15 +92,10 @@ module.exports = withBundleAnalyzer({
       use: ['@svgr/webpack'],
     })
 
-    if (!dev && !isServer) {
-      // Replace React with Preact only in client production build
-      Object.assign(config.resolve.alias, {
-        'react/jsx-runtime.js': 'preact/compat/jsx-runtime',
-        react: 'preact/compat',
-        'react-dom/test-utils': 'preact/test-utils',
-        'react-dom': 'preact/compat',
-      })
-    }
+    // NOTE:
+    // Avoid aliasing React -> Preact only on the client in production.
+    // That split (server: React, client: Preact) can cause hydration mismatches,
+    // especially with libraries that rely on React internals.
 
     return config
   },

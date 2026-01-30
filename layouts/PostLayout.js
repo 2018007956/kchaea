@@ -6,6 +6,7 @@ import Image from '@/components/Image'
 import ViewCounter from '@/components/ViewCounter'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
+import formatDate from '@/lib/utils/formatDate'
 import Comments from '@/components/comments'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 import {
@@ -45,7 +46,7 @@ export default function PostLayout({ frontMatter, authorDetails, next, prev, chi
                   <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
                     <time dateTime={date}>
                       <BsCalendarDate className="-mt-1.5 mr-1.5 inline h-4 w-4" />
-                      {new Date(date).toLocaleDateString(siteMetadata.locale, postDateTemplate)}
+                      {formatDate(date, postDateTemplate)}
                     </time>
                   </dd>
                 </div>
