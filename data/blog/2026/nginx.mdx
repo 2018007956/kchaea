@@ -1,5 +1,5 @@
 ---
-title: nginx 프록시를 통한 Keycloak SSO 연동
+title: Nginx 프록시를 통한 Keycloak SSO 연동
 date: '2026-01-28'
 tags: [Network, Dev]
 draft: false
@@ -8,22 +8,22 @@ summary: 로컬 개발환경에서 Keycloak 인증 흐름을 테스트하기 위
 
 <img className="inline" src="/static/images/Blog/2026/nginx.jpeg" />
 
-nginx란 트래픽이 많은 웹사이트의 서버(WAS)를 도와주는 비동기 이벤트 기반구조의 경량화 웹 서버이다.
+Nginx란 트래픽이 많은 웹사이트의 서버(WAS)를 도와주는 비동기 이벤트 기반구조의 경량화 웹 서버이다.
 정적 파일 제공, 리버스 프록시, 로드 밸런싱, SSL 종료 같은 역할을 맡을 수 있어 앞단에서 요청을 분산하거나 중계하는 데 자주 사용된다.
 특히 요청 흐름을 제어하고 다른 서버로 안전하게 전달해야 할 때 설정이 단순하고 유연해 개발환경에서 활용하기 좋다.
 
-## 로컬 개발환경에서 nginx를 쓰게 된 이유
+## 로컬 개발환경에서 Nginx를 쓰게 된 이유
 로컬에서 원격 서버(`[...].com`)의 Keycloak SSO 인증 흐름을 테스트해야 했다. 그런데 Keycloak의 `redirect_uri`가 `http://[...].com`으로 고정되어 있어, 로컬 주소로는 인증 플로우를 진행할 수 없는 문제가 있었다.
 
 이를 해결하기 위해 로컬 환경을 `[...].com`처럼 보이도록 만들고, 인증 이후의 API 요청을 원격 서버로 전달하는 구조가 필요했다. 
-그래서 로컬 nginx를 리버스 프록시로 두고 다음과 같이 구성했다.
+그래서 로컬 Nginx를 리버스 프록시로 두고 다음과 같이 구성했다.
 
 - `/etc/hosts`에 `127.0.0.1 [...].com` 추가
-- 로컬 nginx를 리버스 프록시로 설정하여 원격 API로 전달
+- 로컬 Nginx를 리버스 프록시로 설정하여 원격 API로 전달
 - 프론트엔드 API 경로에 `/api` prefix 추가
 
-### nginx 리버스 프록시 설정 과정
-아래는 로컬 nginx에서 `/api` 요청만 원격 `[...].com`으로 프록시하는 `nginx.local.conf` 파일이다.
+### Nginx 리버스 프록시 설정 과정
+아래는 로컬 Nginx에서 `/api` 요청만 원격 `[...].com`으로 프록시하는 `nginx.local.conf` 파일이다.
 
 ```nginx
 worker_processes 1;
@@ -79,10 +79,10 @@ http {
 3. 브라우저에서 http://[...].com 접속
 
 
-결과적으로 로컬에서도 `[...].com` 도메인을 통해 Keycloak 인증 흐름을 재현할 수 있고, 인증 후 API 호출은 nginx가 원격 서버로 라우팅해 정상적으로 테스트가 가능해졌다.
+결과적으로 로컬에서도 `[...].com` 도메인을 통해 Keycloak 인증 흐름을 재현할 수 있고, 인증 후 API 호출은 Nginx가 원격 서버로 라우팅해 정상적으로 테스트가 가능해졌다.
 
 로컬 개발이 끝나고, 원격 서버에 직접 접속하고자 한다면,
 1. `/etc/hosts`에서 `127.0.0.1 localhost`로 수정
-2. `sudo pkill nginx`로 nginx 중지
+2. `sudo pkill nginx`로 Nginx 중지
 
 이후 브라우저에 접속하면 된다.
