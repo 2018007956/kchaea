@@ -1,0 +1,68 @@
+---
+title: 'Nginx'
+date: '2026-01-28'
+tags: [Nginx, local]
+draft: false
+summary: 도메인 접근 시 /api 는 원격 백엔드 서버로, 나머지는 로컬 Vite dev 서버로 보내는 개발 환경용 Reverse Proxy 구성
+images: []
+layout: PostSimple
+---
+
+프론트 개발환경에서 `nginx.local.conf` 생성
+
+```nginx
+worker_processes 1;
+error_log /tmp/nginx_error.log debug;
+pid /tmp/nginx.pid;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    # 로그 설정
+    access_log /tmp/nginx_access.log;
+
+    # 내부 DNS 사용 (hosts 파일 우회)
+    # proxy_pass에서 도메인 주소를 사용할 경우 필수
+    # valid=30s → DNS 결과를 30초 동안 캐싱
+    resolver [ip addr] valid=30s;
+
+    server {
+        # Nginx가 수신할 포트
+        # 외부에서 접근하려면 포트포워딩과 방화벽(ufw, security group)에서 80 허용 필요
+        listen 80;
+        server_name [...].com; # 외부에서 호출하면 이동시킬 도메인 or IP
+
+        # API 요청 → 원격 서버 (로그인/로그아웃/OAuth2 포함)
+        # Spring context-path가 /api이므로 모든 백엔드 요청은 /api/로 시작
+        location /api/ {
+            set $backend "[...].com";
+            proxy_pass http://$backend$request_uri; # 클라이언트가 요청한 전체 URI(/api/xxx?query)를 백엔드로 전달
+            proxy_http_version 1.1; # keep-alive, WebSocket, chunked response 등을 위해 1.1 명시
+            proxy_set_header Host [...].com; # 백엔드 서버가 인식할 Host 헤더. Spring Security, OAuth redirect_uri, CORS 판단에 중요
+            proxy_set_header X-Real-IP $remote_addr; # 실제 클라이언트 IP. 로그, 보안 필터, rate-limit 용도
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; # 프록시 체인을 거친 모든 클라이언트 IP 기록
+            proxy_set_header X-Forwarded-Proto $scheme; # http/https 구분. Spring에서 request.isSecure(), redirect 판단에 사용
+        }
+
+        # 프론트 요청 → Vite 개발 서버 (localhost:5173)
+        location / {
+            proxy_pass http://127.0.0.1:5173; # 로컬에서 실행 중인 Vite dev server로 전달
+            proxy_http_version 1.1; # Vite HMR(WebSocket) 사용을 위해 필수
+            proxy_set_header Host $host; # 클라이언트가 요청한 원래 도메인을 유지. 이 설정이 없으면 Vite HMR, WebSocket, absolute URL 기반 동작에서 문제 발생 가능
+            proxy_set_header Upgrade $http_upgrade; # HTTP → WebSocket 업그레이드 요청 전달. Vite HMR, code-server, live reload에 필수
+            proxy_set_header Connection "upgrade"; # Upgrade 헤더와 함께 동작. 없으면 WebSocket 1006 오류 발생
+            proxy_set_header X-Real-IP $remote_addr; # 프론트에서도 클라이언트 실제 IP 추적 가능
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; # 프록시 체인 IP 기록
+            proxy_set_header X-Forwarded-Proto $scheme; # 프론트에서 현재 프로토콜 인식 필요할 경우 대비
+        }
+    }
+}
+```
+
+## Nginx 실행
+`sudo nginx -c $(pwd)/nginx.local.conf`
+
+## Nginx 중지
+`sudo pkill nginx`

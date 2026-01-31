@@ -23,54 +23,34 @@ Nginx란 트래픽이 많은 웹사이트의 서버(WAS)를 도와주는 비동�
 - 프론트엔드 API 경로에 `/api` prefix 추가
 
 ### Nginx 리버스 프록시 설정 과정
-아래는 로컬 Nginx에서 `/api` 요청만 원격 `[...].com`으로 프록시하는 `nginx.local.conf` 파일이다.
-
+아래는 로컬 Nginx에서 `/api` 요청만 원격 `[...].com`으로 프록시하는 `nginx.local.conf` 파일의 주요 코드이다.
+전체 코드는 [Snippet: Nginx](http://localhost:3000/snippets/nginx) 에서 확인 가능하다.
 ```nginx
-worker_processes 1;
-error_log /tmp/nginx_error.log debug;
-pid /tmp/nginx.pid;
+# 내부 DNS 사용 (hosts 파일 우회)
+resolver [ip addr] valid=30s;
 
-events {
-    worker_connections 1024;
-}
+server {
+    listen 80;
+    server_name [...].com;
 
-http {
-    # 로그 설정
-    access_log /tmp/nginx_access.log;
+    # API 요청 → 원격 서버 (로그인/로그아웃/OAuth2 포함)
+    # Spring context-path가 /api이므로 모든 백엔드 요청은 /api/로 시작
+    location /api/ {
+        set $backend "[...].com";
+        proxy_pass http://$backend$request_uri;
+        proxy_http_version 1.1;
+        proxy_set_header Host [...].com;
+        ...
+    }
 
-    # 내부 DNS 사용 (hosts 파일 우회)
-    resolver [ip addr] valid=30s;
-
-    server {
-        listen 80;
-        server_name [...].com;
-
-        # API 요청 → 원격 서버 (로그인/로그아웃/OAuth2 포함)
-        # Spring context-path가 /api이므로 모든 백엔드 요청은 /api/로 시작
-        location /api/ {
-            set $backend "[...].com";
-            proxy_pass http://$backend$request_uri;
-            proxy_http_version 1.1;
-            proxy_set_header Host [...].com;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-        }
-
-        # 나머지 요청 → Vite 개발 서버 (localhost:5173)
-        location / {
-            proxy_pass http://127.0.0.1:5173;
-            proxy_http_version 1.1;
-            proxy_set_header Host $host;
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection "upgrade";
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-        }
+    # 나머지 요청 → Vite 개발 서버 (localhost:5173)
+    location / {
+        proxy_pass http://127.0.0.1:5173;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        ...
     }
 }
-
 ```
 
 그리고 다음과 같이 사용하면 된다.
