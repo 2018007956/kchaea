@@ -66,3 +66,12 @@ http {
 
 ## Nginx 중지
 `sudo pkill nginx`
+
+## 로그 확인
+```bash
+# 에러 로그
+tail -f /tmp/nginx_error.log
+
+# 접근 로그
+tail -f /tmp/nginx_access.log
+```
