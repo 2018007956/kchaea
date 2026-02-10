@@ -1,0 +1,179 @@
+---
+title: SSE로 실시간 데이터 동기화 구현
+date: '2026-02-06'
+tags: [SSE, Dev]
+draft: false
+summary: SSE 적용 과정 공유
+---
+
+IP 주소 관리(IPAM) 시스템을 개발하면서 다음과 같은 요구사항이 생겼다.
+
+> 어떤 사용자가 데이터를 수정하면,
+새로고침 없이 모든 사용자 화면에 즉시 반영되게 하고 싶다.
+
+페이지에서 변경사항이 일어났을 때 모든 클라이언트에게 반영하기 위해서는 다음과 같은 기술들이 사용된다.
+
+| 기술            | 방식           | 실시간성 | 양방향 | 복잡도 |
+| ------------- | ------------ | ---- | --- | --- |
+| Polling       | 주기적 요청       | ❌    | ❌   | 낮음  |
+| Long Polling  | 대기 후 응답      | ⚠️   | ❌   | 중   |
+| **SSE**       | 서버 → 클라 push | ✅    | ❌   | 낮음  |
+| **WebSocket** | 양방향 지속 연결    | ✅    | ✅   | 높음  |
+| Webhook       | 서버 → 서버      | ❌    | ❌   | 중   |
+
+'즉시' 반영되어야 하는 것이기 때문에,
+이 중 서버 → 클라이언트 방향의 실시간 Push 통신인 SSE가 가장 적합하다.
+
+## SSE(Server-Sent Events)
+SSE는 HTTP 기반의 단방향 스트리밍 통신이다.
+서버가 클라이언트에게 이벤트를 지속적으로 밀어주며,
+브라우저에서는 EventSource API로 바로 사용할 수 있다.
+
+Server-Sent Events (SSE)를 활용하여 서버에서 데이터 변경 시 모든 클라이언트에게 자동으로 알림을 보내고, 
+TanStack Query 캐시를 무효화하여 UI를 자동 갱신하는 기능을 적용한 과정에 대해 공유하고자 한다.
+
+### 1. SSE 클라이언트 연결 (useRealtimeUpdate Hook)
+파일: `src/app/hooks/useRealtimeUpdate.ts` (신규)
+- EventSource를 사용하여 /api/sse/subscribe 엔드포인트에 연결
+- 인증 쿠키 포함 (withCredentials: true)
+- 연결 에러 시 5초 후 자동 재연결
+- 컴포넌트 언마운트 시 연결 종료
+
+### 2. SSE 이벤트 핸들러
+| 이벤트 | 발생 시점 | 무효화 대상 |
+| --- | --- | --- |
+| connect | 연결 성공 시 | - (확인용) |
+| subnet-updated | 서브넷 생성/수정/삭제/분할/병합 | queryKeys.subnets.all, queryKeys.dashboard.all |
+| address-updated | IP 주소 예약/예약 취소 | subnetIPsQueryKey(subnetId) |
+| region-updated | 리전 생성/수정/삭제 | queryKeys.regions.all |
+| favorite-updated | 즐겨찾기 추가/삭제 | ['favorites'] |
+| log-updated | 로그 생성 | ['logs'] |
+
+### 3. 대시보드 SSE 연동
+파일: `src/app/pages/Dashboard.tsx`
+
+기존 `useState` + `useEffect` 패턴을 `useQuery`로 마이그레이션하여 SSE 캐시 무효화가 작동하도록 수정
+
+```typescript
+// 공인 IP 가용 현황 - useQuery로 조회
+const { data: dashboardData } = useQuery({
+  queryKey: ['dashboard', { prefixes: dashboardPrefixes }],
+  queryFn: () => fetchDashboardData(dashboardPrefixes),
+  staleTime: 30 * 1000,
+});
+
+// 최근 활동 - useQuery로 조회
+const { data: logsPage } = useQuery({
+  queryKey: ['logs', { page: 0, size: 10 }],
+  queryFn: () => fetchLogs({ page: 0, size: 10 }),
+  staleTime: 30 * 1000,
+});
+```
+
+### 4. Query Keys 확장
+파일: `src/app/services/queries/queryClient.ts`
+
+대시보드 관련 쿼리 키 추가:
+```typescript
+export const queryKeys = {
+  // ... 기존 코드 ...
+  
+  // 대시보드 관련
+  dashboard: {
+    all: ['dashboard'] as const,
+    publicSubnets: (prefixes?: number[]) => 
+      [...queryKeys.dashboard.all, 'publicSubnets', { prefixes }] as const,
+  },
+} as const;
+```
+
+### 5. Nginx SSE 설정
+파일: `nginx.conf`, `nginx.local.conf`
+
+SSE 전용 엔드포인트 설정 추가:
+
+```nginx
+# SSE 전용 엔드포인트 (반드시 /api/ 보다 먼저 선언)
+location ^~ /api/sse/ {
+    proxy_pass http://backend/api/sse/;
+    proxy_http_version 1.1;
+    proxy_set_header Connection '';
+    
+    # SSE 필수 설정
+    proxy_buffering off;        # 버퍼링 비활성화 (실시간 전송)
+    proxy_cache off;            # 캐시 비활성화
+    chunked_transfer_encoding off;
+    proxy_read_timeout 24h;     # 연결 유지 시간
+}
+```
+
+### 6. Vite 프록시 설정
+파일: `vite.config.ts`
+
+개발 환경에서 SSE 연결을 위한 프록시 설정:
+```typescript
+proxy: {
+  // SSE 전용 (타임아웃 비활성화) - 반드시 /api 보다 먼저!
+  '/api/sse': {
+    target: 'http://[...].com',
+    changeOrigin: true,
+    timeout: 0,
+  },
+  // 나머지 API
+  '/api': {
+    target: 'http://[...].com',
+    changeOrigin: true,
+  },
+},
+```
+
+### 7. App.tsx SSE 연결
+파일: `src/app/App.tsx`
+
+인증된 사용자에게만 SSE 연결:
+```typescript
+function AuthenticatedApp({ children }: { children: React.ReactNode }) {
+  useRealtimeUpdate(); // SSE 연결
+  return <>{children}</>;
+}
+```
+
+## 동작 방식
+```
+┌──────────────────────────────────────────────────────────────┐
+│                      SSE 실시간 동기화 흐름                      │
+├──────────────────────────────────────────────────────────────┤
+│                                                              │
+│        [사용자 A] ──→ 서브넷 생성 ──→ [백엔드]                     │
+│                                      │                       │
+│                                      ├──→ DB INSERT          │
+│                                      │                       │
+│                                      └──→ SSE 브로드캐스트      │
+│                                          (subnet-updated)    │
+│                                                   │          │
+│                    ┌──────────────────────────────┼─────┐    │
+│                    ↓                              ↓     ↓    │
+│                 [사용자 A]                     [사용자 B] [C]   │
+│                    │                              │     │    │
+│                    └──→ invalidateQueries(['subnets'])  │    │
+│                         invalidateQueries(['dashboard'])│    │
+│                                                   │     │    │
+│                                                자동 refetch   │
+│                                                              │
+└──────────────────────────────────────────────────────────────┘
+```
+
+## SSE의 장점
+- **자동 동기화**: 다른 사용자의 변경사항이 즉시 반영됨
+- **코드 간소화**: 프론트엔드에서 수동 invalidateQueries 호출 불필요
+- **일관성 보장**: 모든 클라이언트가 동일한 데이터 상태 유지
+- **실시간성**: 새로고침 없이 최신 데이터 확인
+
+## 테스트 방법
+1. 두 개의 브라우저 탭에서 대시보드 페이지 열기  
+   개발자도구를 열면 SSE 연결 메시지 확인 가능
+   <img className="inline" src="/static/images/Blog/2026/sse.png" />
+2. 한 탭에서 서브넷 생성/삭제 수행
+3. 다른 탭에서 "공인 IP 가용 현황"이 자동으로 업데이트되는지 확인
+4. 콘솔에서 [SSE] 서브넷 변경 감지 로그 확인
+   <img className="inline" src="/static/images/Blog/2026/sse-change-detection.png" />
