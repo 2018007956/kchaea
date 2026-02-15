@@ -1,0 +1,55 @@
+---
+title: 최근 핫한 OpenClaw 윈도우 세팅
+date: '2026-02-15'
+tags: [AI, OpenClaw]
+draft: false
+summary: 미니 PC에 OpenClaw를 세팅하고 사용해 본 느낀 점 공유
+---
+
+<img className="inline" src="/static/images/Blog/2026/openclaw.png" />
+
+OpenClaw가 막 나와서 스레드와 링크드인에 글이 막 올라올 시점부터 나도 설치해봐야지 했는데 이제야 여유가 생겨서 뒤늦게 세팅해보았다. 그 과정과 느낀점에 대해 공유해보고자 이 글을 작성한다.
+
+일단 내 개인정보를 모두 삭제하기 위해 사용하던 미니 PC를 초기화했다.
+
+<img className="inline" src="/static/images/Blog/2026/pc-reset.jpg" />
+
+초기화가 완료되면 wsl과 node를 설치하고 OpenClaw 설치한다. 설치 과정은 잘 정리한 블로그들이 많으니 생략하겠다.
+
+<img className="inline" src="/static/images/Blog/2026/openclaw-install.jpg" />
+
+설치가 끝나면 OpenClaw의 기본 설정을 하는데, 이때 필요한 API 키 설정이나 환경 변수, 서비스 연결 등을 진행한다. 나는 며칠 전 구매한 GPT pro를 연동했다.
+
+<img className="inline" src="/static/images/Blog/2026/openclaw-models.png" />
+
+Gateway 연결과 gpt api 연결을 끝내고, 텔레그렘으로 봇을 연결 후 `/start`를 하면 아래 사진과 같이 연결이 되는 것을 볼 수 있다.
+
+<img
+  className="inline"
+  src="/static/images/Blog/2026/openclaw-set.jpg"
+  style={{ maxWidth: '480px', display: 'block', margin: '0 auto' }}
+/>
+
+OpenClaw와 대화할 때마다 API 크레딧이 소진된다. 충전해둔 `$5.5` 크레딧이 생각보다 빨리 소진되어 서비스가 중단되었고, 뭔가를 해보기도 전에 `$5`가 금방 사라져버려서 황당했다.
+GPT 구독료와 별개로 API 비용을 지불해야 한다는 점 또한 부담스러워서 당분간 더 사용해보기는 어려울 것 같다.
+
+API 비용이 대화마다 발생하다 보니, 이걸 쓰게 되면 프롬프팅의 퀄리티(내용 + 길이)를 더 신경 써야하고 한 번에 잘 정리해서 물어봐야해서 편하게 탐색해보기 어려운 점이 아쉽다.
+여기서 프롬프팅의 중요성이 확 체감되었고, 공부가 필요한 영역이구나를 처음 느꼈다.
+
+<img
+  className="inline"
+  src="/static/images/Blog/2026/openclaw-billing.jpg"
+  style={{ maxWidth: '480px', display: 'block', margin: '0 auto' }}
+/>
+
+그리고 응답 속도가 너무 느렸다. 10분을 넘어가는 것도 있었고, 최소 2-3분은 소요됐다.
+API가 끊긴건가 싶어 '된거야?'를 여러 번 보냈는데 이것도 크레딧에 포함돼서 빨리 끊겼나보다.
+
+세팅과정에서 뭔가 놓친게 있나? 이 속도로는 나처럼 성격급한 사람들은 절대 못쓴다.
+또한, 자동화를 시키는 것보다 GPT pro로 직접 답변받는게 더 편하고 사용성이 좋다고 느껴서 OpenClaw는 나중에 속도나 요금 구조가 개선됐을 때 다시 도전해 볼 생각이다.
+
+<img
+  className="inline"
+  src="/static/images/Blog/2026/openclaw-insta.jpg"
+  style={{ maxWidth: '480px', display: 'block', margin: '0 auto' }}
+/>
