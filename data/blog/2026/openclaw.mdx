@@ -3,26 +3,23 @@ title: 최근 핫한 OpenClaw 윈도우 세팅
 date: '2026-02-15'
 tags: [AI, OpenClaw]
 draft: false
-summary: 미니 PC에 OpenClaw를 세팅하고 사용해 본 느낀 점 공유
+summary: API 과금 문제와 pro 모델의 응답 속도 문제로 실사용이 어려웠던 경험 공유
 ---
 
 <img className="inline" src="/static/images/Blog/2026/openclaw.png" />
-
-OpenClaw가 막 나와서 스레드와 링크드인에 글이 막 올라올 시점부터 나도 설치해봐야지 했는데 이제야 여유가 생겨서 뒤늦게 세팅해보았다. 그 과정과 느낀점에 대해 공유해보고자 이 글을 작성한다.
+OpenClaw가 막 나와서 스레드와 링크드인에 글이 막 올라올 시점부터 나도 설치해봐야지 했는데 이제야 여유가
+생겨서 뒤늦게 세팅해보았다. 그 과정과 느낀점에 대해 공유해보고자 이 글을 작성한다.
 
 일단 내 개인정보를 모두 삭제하기 위해 사용하던 미니 PC를 초기화했다.
 
 <img className="inline" src="/static/images/Blog/2026/pc-reset.jpg" />
-
 초기화가 완료되면 wsl과 node를 설치하고 OpenClaw 설치한다. 설치 과정은 잘 정리한 블로그들이 많으니 생략하겠다.
-
 <img className="inline" src="/static/images/Blog/2026/openclaw-install.jpg" />
-
-설치가 끝나면 OpenClaw의 기본 설정을 하는데, 이때 필요한 API 키 설정이나 환경 변수, 서비스 연결 등을 진행한다. 나는 며칠 전 구매한 GPT pro를 연동했다.
-
+설치가 끝나면 OpenClaw의 기본 설정을 하는데, 이때 필요한 API 키 설정이나 환경 변수, 서비스 연결 등을
+진행한다. 나는 며칠 전 구매한 GPT pro를 연동했다.
 <img className="inline" src="/static/images/Blog/2026/openclaw-models.png" />
-
-Gateway 연결과 gpt api 연결을 끝내고, 텔레그렘으로 봇을 연결 후 `/start`를 하면 아래 사진과 같이 연결이 되는 것을 볼 수 있다.
+Gateway 연결과 gpt api 연결을 끝내고, 텔레그렘으로 봇을 연결 후 `/start`를 하면 아래 사진과 같이 연결이
+되는 것을 볼 수 있다.
 
 <img
   className="inline"
@@ -53,3 +50,8 @@ API가 끊긴건가 싶어 '된거야?'를 여러 번 보냈는데 이것도 크
   src="/static/images/Blog/2026/openclaw-insta.jpg"
   style={{ maxWidth: '480px', display: 'block', margin: '0 auto' }}
 />
+
+💡 OpenClaw API 호출 과정에서 지연이 많이 되는 줄 알았는데, 생각해 보니 모델 문제다.
+GPT pro를 연동해놔서 응답이 느렸던 것이다. 이 부분은 모델을 바꿔서 다시 테스트 해봐야할 것 같다.
+보통 API 호출 비용이 많이 들어서 로컬 LLM으로 돌린다고 하는데,
+이 다음 글로 로컬 LLM(ollama)을 연동한 OpenClaw 세팅 과정을 작성해보겠다.
