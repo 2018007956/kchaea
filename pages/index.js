@@ -1,6 +1,7 @@
 import Link from '@/components/Link'
 import { PageSEO } from '@/components/SEO'
 import Tag from '@/components/Tag'
+import projectsData from '@/data/projectsData'
 import siteMetadata from '@/data/siteMetadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import formatDate from '@/lib/utils/formatDate'
@@ -9,6 +10,24 @@ import NewsletterForm from '@/components/NewsletterForm'
 import ViewCounter from '@/components/ViewCounter'
 
 const MAX_DISPLAY = 3
+const STOCK_PROJECT = projectsData.find((project) => project.title.includes('알려주가'))
+const SERVICE_LINKS = [
+  {
+    name: 'GrassMate',
+    href: 'https://grassmate.vercel.app/',
+    icon: '🌱',
+  },
+  {
+    name: 'GigCal',
+    href: 'https://gigcal.vercel.app/',
+    icon: '🎵',
+  },
+  {
+    name: '알려주가 AI',
+    href: STOCK_PROJECT?.href || STOCK_PROJECT?.github,
+    icon: null,
+  },
+].filter((service) => service.href)
 
 export async function getStaticProps() {
   const posts = await getAllFilesFrontMatter('blog')
@@ -22,7 +41,7 @@ export default function Home({ posts }) {
       <PageSEO title={siteMetadata.title} description={siteMetadata.description} />
       <div>
         <div className="mb-12 flex flex-col items-center gap-x-12 xl:flex-row">
-          <div className="pt-6">
+          <div className="pt-6 xl:flex-1">
             <h1 className="pb-6 text-2xl font-extrabold leading-10 tracking-tight text-gray-900 dark:text-gray-100 sm:text-3xl sm:leading-12 md:text-4xl md:leading-14">
               안녕하세요, {/* <br /> */}
               <span className="text-primary-color-500 dark:text-primary-color-dark-500">
@@ -30,7 +49,7 @@ export default function Home({ posts }) {
               </span>{' '}
               입니다
             </h1>
-            <h2 className="prose pt-5 text-base text-gray-600 dark:text-gray-300">
+            <h2 className="prose max-w-[70ch] pt-5 text-base text-gray-600 dark:text-gray-300">
               {`저의 개인 블로그에 오신 것을 환영합니다. 저는 자동화를 통해 효율적인 시스템을 구축하는 일에 관심이 있으며, 클라우드 기술에 지속적인 관심을 가지고 있습니다. `}
               여가 시간에는 AI 기술을 활용해 아이디어를 빠르게 서비스로 구현하는 사이드 프로젝트를
               하는 것을 좋아합니다.
@@ -50,7 +69,7 @@ export default function Home({ posts }) {
               </RoughNotation>
               를 담은 공간입니다. 편하게 둘러보세요!{' '}
             </p>
-            <p className="prose hidden pt-10 text-base leading-7 text-slate-600 dark:text-slate-300 md:block">
+            <p className="prose hidden max-w-[70ch] pt-10 text-base leading-7 text-slate-600 dark:text-slate-300 md:block">
               이곳은{' '}
               <RoughNotation
                 animate="true"
@@ -105,99 +124,52 @@ export default function Home({ posts }) {
               </span>
             </h1>
           </div> */}
-          <div className="flex items-center justify-center">
-            <div className="grid grid-cols-1 grid-rows-3 gap-8 py-12">
-              <div className="my-2 grid items-start gap-8">
-                <div className="group relative">
-                  <div className="animate-tilt absolute -inset-0.5 rounded-lg bg-gradient-to-r from-pink-600 to-purple-600 opacity-50 blur transition duration-1000 group-hover:opacity-100 group-hover:duration-200"></div>
-                  <Link href="/projects">
-                    <span className="relative flex items-center divide-x divide-gray-600 rounded-lg bg-white px-7 py-4 leading-none dark:bg-black">
-                      <span className="flex items-center space-x-5">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6 -rotate-6 text-green-600"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
-                          />
-                        </svg>
-                        <span className="pr-6 text-gray-900 dark:text-gray-100">What I built</span>
-                      </span>
-                      <span className="pl-6 text-amber-400 transition duration-200 group-hover:text-gray-900 dark:group-hover:text-gray-100">
-                        Projects&nbsp;&rarr;
-                      </span>
-                    </span>
-                  </Link>
-                </div>
+          <div
+            className="flex items-center justify-center py-4"
+            style={{ transform: 'translate(-6ch, 1ch)' }}
+          >
+            <div className="w-fit">
+              <div className="ml-2 flex items-center gap-2.5">
+                <h3 className="whitespace-nowrap font-mono text-lg font-semibold text-gray-900 dark:text-gray-100">
+                  👻 My Services
+                </h3>
               </div>
-              <div className="my-2 grid items-start gap-8">
-                <div className="group relative">
-                  <div className="animate-tilt absolute -inset-0.5 rounded-lg bg-gradient-to-r from-fuchsia-600 to-emerald-600 opacity-50 blur transition duration-1000 group-hover:opacity-100 group-hover:duration-200"></div>
-                  <Link href="https://github.com/2018007956">
-                    <span className="relative flex items-center divide-x divide-gray-600 rounded-lg bg-white px-7 py-4 leading-none dark:bg-black">
-                      <span className="flex items-center space-x-5">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6 -rotate-6 text-pink-600"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                          />
-                        </svg>
-                        <span className="pr-6 text-gray-900 dark:text-gray-100">See my code</span>
+              <ul className="mt-3 space-y-1.5">
+                {SERVICE_LINKS.map((service) => (
+                  <li key={service.name}>
+                    <Link
+                      href={service.href}
+                      className="group flex min-w-[10.5rem] items-center rounded-lg bg-gray-100 px-2.5 py-2 text-gray-600 transition hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                    >
+                      <span className="mr-2 flex h-5 w-5 items-center justify-center rounded-full bg-amber-200 text-amber-900 dark:bg-amber-300 dark:text-amber-950">
+                        {service.icon ? (
+                          <span className="text-[10px] leading-none" aria-hidden="true">
+                            {service.icon}
+                          </span>
+                        ) : (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            className="h-3 w-3"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={1.8}
+                              d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3zm0 0v9m0 0l8-4.5M12 12l-8-4.5"
+                            />
+                          </svg>
+                        )}
                       </span>
-                      <span className="pl-6 text-indigo-400 transition duration-200 group-hover:text-gray-900 dark:group-hover:text-gray-100">
-                        GitHub&nbsp;&rarr;
+                      <span className="font-mono text-sm font-semibold leading-none tracking-tight">
+                        {service.name}
                       </span>
-                    </span>
-                  </Link>
-                </div>
-              </div>
-              <div className="my-2 grid items-start gap-8">
-                <div className="group relative">
-                  <div className="animate-tilt absolute -inset-0.5 rounded-lg bg-gradient-to-r  from-pink-600 to-purple-600 opacity-50 blur transition duration-1000 group-hover:opacity-100 group-hover:duration-200"></div>
-                  <Link href="https://docs.google.com/document/d/1RAl7p4pSo3fWz4_fN_NsG7En5o0eVECQ34c8mQwwvkQ/edit?usp=sharing">
-                    <span className="relative flex items-center divide-x divide-gray-600 rounded-lg bg-white px-7 py-4 leading-none dark:bg-black">
-                      <span className="flex items-center space-x-5">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6 -rotate-6 text-fuchsia-600"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path d="M12 14l9-5-9-5-9 5 9 5z" />
-                          <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"
-                          />
-                        </svg>
-                        <span className="pr-6 text-gray-900 dark:text-gray-100">
-                          Hire me!&nbsp;&nbsp;&nbsp;
-                        </span>
-                      </span>
-                      <span className="pl-6 text-primary-400 transition duration-200 group-hover:text-gray-900 dark:group-hover:text-gray-100">
-                        Resume&nbsp;&rarr;
-                      </span>
-                    </span>
-                  </Link>
-                </div>
-              </div>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
