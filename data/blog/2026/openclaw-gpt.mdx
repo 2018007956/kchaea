@@ -1,0 +1,44 @@
+---
+title: 'OpenClaw에 GPT OAuth 연동 - 드디어 사용 가능한 환경 구축 성공!'
+date: '2026-03-07'
+tags: [AI, OpenClaw]
+draft: false
+summary: OpenClaw에 로컬 Ollama 대신 OpenAI Codex OAuth 모델 붙이기
+---
+
+OpenClaw는 맥미니에 세팅하려고 멕미니 주문시키고 기다리고 있었는데,
+Codex oauth로 해서 openai 구독자면 추가비용 없이 쓸 수 있다는 말을 쓰레드에서 봤다.
+
+바로 다시 openclaw를 켜서 세팅해보기로 했다.
+
+Codex OAuth 세팅을 하기 위해서, 온보딩을 Codex OAuth 경로로 강제하는 명령어를 사용했다.
+
+```bash
+openclaw onboard --auth-choice openai-codex
+```
+
+터미널에 찍힌 `https://auth.openai.com/oauth/authorize?...` 주소를 브라우저에서 열고 로그인을 하면,
+브라우저 주소창이 `http://localhost:1455/auth/callback?code=XXXX&state=YYYY` 이렇게 바뀌는데
+이 주소를 복사해서 터미널에 붙여넣으면 된다.
+
+<img className="inline" src="/static/images/Blog/2026/openclaw1-authorize.png" />
+
+설정 파일 `~/.openclaw/openclaw.json` 에서 다음과 같이 기본 모델을 Codex로 바꾸면,
+
+<img className="inline" src="/static/images/Blog/2026/openclaw2-model.png" />
+
+모델이 잘 설정된 것을 볼 수 있다.
+
+<img className="inline" src="/static/images/Blog/2026/openclaw3-status.png" />
+
+하지만 텔레그렘에서는 모델이 이전 모델에서 바뀌지 않는데,
+
+<img className="inline" src="/static/images/Blog/2026/openclaw4-telegram.png" />
+
+`openclaw gateway restart`를 해서 기존 텔레그렘 세션에 남아 있는 모델을 제거해줘야 한다.
+
+<img className="inline" src="/static/images/Blog/2026/openclaw5-success.png" />
+
+그러면 모델이 gpt로 바뀌면서 사용을 할 수 있다.
+
+다음 글로, 제대로 된 OpenClaw 사용 후기를 가져오겠다.
