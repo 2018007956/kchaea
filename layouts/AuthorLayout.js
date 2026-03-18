@@ -49,16 +49,6 @@ export default function AuthorLayout({ children, frontMatter }) {
               </RoughNotation>
             </p>
             <br />
-            <p>
-              현재 제가 하고 있는 일입니다.{' '}
-              <Link
-                href={'/now'}
-                className="special-underline no-underline hover:text-gray-100 dark:text-gray-100 hover:dark:text-gray-100"
-              >
-                Link
-              </Link>
-            </p>
-            <br />
             <p className="sm:block md:hidden lg:hidden">
               저는 항상 새로운 것에 도전하는 것을 좋아합니다. 현재는{' '}
               <span className="font-semibold">OpenStack 프로젝트에 코드 기여</span>를 하며 오픈소스
