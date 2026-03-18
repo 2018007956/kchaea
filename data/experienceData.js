@@ -1,6 +1,16 @@
 const experienceData = [
   {
     title: '인턴',
+    company: 'NHN Cloud',
+    location: '경기도 성남시',
+    range: '2026.01 - 2026.03',
+    url: 'https://www.nhncloud.com/kr',
+    text1: '사내 IP 주소 통합 관리 플랫폼, IPAM(IP Address Management) 개발',
+    text2: '서브넷 계층 구조를 따라 가용 블록과 자식 서브넷을 직관적으로 확인할 수 있는 UI/UX 설계',
+    text3: 'IP예약/해제, 서브넷 CRUD 등에 SSE와 캐싱 기반 실시간 동기화 기능을 적용하여 충돌 가능성 감소',
+  },
+  {
+    title: '인턴',
     company: '한화시스템',
     location: '서울시 여의도',
     range: '2025.01 - 2025.02',

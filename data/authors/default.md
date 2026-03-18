@@ -2,11 +2,11 @@
 name: Chaea Kim
 avatar: /static/images/avatar.png
 occupation: Cloud Engineer
-company: XXX
+company: NHN Cloud
 email: chaea11s0@gmail.com
 linkedin: https://www.linkedin.com/in/kchaea/
 github: https://github.com/2018007956
-text1: 저는 컴퓨터소프트웨어를 전공한 개발자입니다. 자동화 기술과 클라우드 플랫폼에 관심이 있으며,
+text1: 안녕하세요, 서비스 뒷단의 인프라와 시스템 설계에 관심이 많은 개발자입니다.
 text2:
 text3:
 ---

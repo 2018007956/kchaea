@@ -45,28 +45,12 @@ export default function AuthorLayout({ children, frontMatter }) {
                 animationDelay={300}
                 animationDuration={3000}
               >
-                {text1} 현재는 오픈스택을 구축하는 일에 집중하고 있습니다.{' '}
+                {text1} 문제를 구조적으로 해결하고 더 효율적인 시스템을 만드는 일에 흥미를 느낍니다.{' '}
               </RoughNotation>
             </p>
             <br />
-            <p className="sm:block md:hidden lg:hidden">
-              저는 항상 새로운 것에 도전하는 것을 좋아합니다. 현재는{' '}
-              <span className="font-semibold">OpenStack 프로젝트에 코드 기여</span>를 하며 오픈소스
-              개발 생태계를 경험하고 있으며, 동시에{' '}
-              <RoughNotation
-                type="underline"
-                show={true}
-                color="#FBCFE8"
-                animationDelay={1500}
-                animationDuration={3000}
-                multiline={true}
-              >
-                서비스 개발 또는 클라우드 인프라 분야에서 실무 경험을 쌓을 수 있는 기회를 찾고
-                있습니다.
-              </RoughNotation>
-            </p>
             <p className="hidden md:block">
-              저는 항상 새로운 것에 도전하는 것을 좋아합니다. 현재는{' '}
+              저는 사람들과 함께 지식을 공유하고 발표하는 것을 좋아하며,{' '}
               <RoughNotation
                 animationDelay="1000"
                 animationDuration="3000"
@@ -75,9 +59,8 @@ export default function AuthorLayout({ children, frontMatter }) {
                 strokeWidth="3"
                 show={true}
               >
-                <span className="text-black dark:text-white">OpenStack 프로젝트에 코드 기여</span>
+                <span className="text-black dark:text-white">함께 배우고 성장할 수 있는 환경</span>
               </RoughNotation>
-              를 하며 오픈소스 개발 생태계를 경험하고 있으며, 동시에{' '}
               <RoughNotation
                 type="underline"
                 show={true}
@@ -86,14 +69,13 @@ export default function AuthorLayout({ children, frontMatter }) {
                 animationDuration={3000}
                 multiline={true}
               >
-                서비스 개발 또는 클라우드 인프라 분야에서 실무 경험을 쌓을 수 있는 기회를 찾고
-                있습니다.
+                을 중요하게 생각합니다.
               </RoughNotation>
             </p>
             <br />
             <p>
-              저는 새로운 사람들과 새로운 프로젝트를 함께하는 일에 항상 열려 있습니다. 이야기하고
-              싶은 것이 있다면 언제든{' '}
+              새로운 사람들과 새로운 프로젝트를 함께하는 일에는 항상 열려 있습니다. 이야기하고 싶은
+              것이 있다면 언제든{' '}
               <Link
                 href={'mailto:chaea11s0@gmail.com'}
                 className="special-underline no-underline hover:text-gray-100 dark:text-gray-100 hover:dark:text-gray-100"
@@ -118,7 +100,7 @@ export default function AuthorLayout({ children, frontMatter }) {
             <br />
             <div>
               <h1>Experience</h1>
-              <div className="max-w-none pb-8 pt-8 xl:col-span-2">
+              <div className="max-w-none pb-8 pt-2 xl:col-span-2">
                 {experienceData.map((d) => (
                   <Experience
                     key={d.company}
@@ -137,7 +119,7 @@ export default function AuthorLayout({ children, frontMatter }) {
             <br />
             <div>
               <h1>Presentation</h1>
-              <div className="max-w-none pb-8 pt-8 xl:col-span-2">
+              <div className="max-w-none pb-8 pt-2 xl:col-span-2">
                 {presentationData.map((d) => (
                   <Presentation
                     key={d.title}

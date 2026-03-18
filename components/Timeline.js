@@ -17,16 +17,30 @@ export default function Timeline() {
             <FaBlackTie className="animate-none" />
           </span>
           <h3 className="flex items-center text-base  font-semibold text-gray-900 dark:text-white">
-            Applying for Jobs
+            NHN Cloud
             <span className="ml-3 mr-2 rounded bg-blue-100 px-2.5 py-0.5 text-sm font-medium text-blue-800 dark:bg-blue-200 dark:text-blue-800">
               Present
             </span>
           </h3>
           <time className="text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
-            June 13th, 2022
+            January 5th, 2026
           </time>
           <p className="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">
-            Feel confident that I can work as a junior Data Engineer. Wish me Luck
+            Working on network operations and infrastructure management
+          </p>
+        </li>
+        <li className="mb-4 ml-8 rounded-md border border-gray-100 bg-white px-4 py-4 shadow-sm shadow-gray-300 dark:border-zinc-900 dark:bg-zinc-900 dark:shadow-none">
+          <span className="absolute -left-3 flex h-6 w-6 items-center justify-center rounded-full bg-sky-200 ring-8 ring-white dark:bg-sky-900 dark:ring-gray-900">
+            <AiOutlineCode />
+          </span>
+          <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+            Open Source Contribution Academy
+          </h3>
+          <time className="text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
+            July, 2025
+          </time>
+          <p className="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">
+            Built an understanding of OpenStack and contributed to OpenStack SDK / CLI
           </p>
         </li>
         <li className="mb-4 ml-8 rounded-md border border-gray-100 bg-white px-4 py-4 shadow-sm shadow-gray-300 dark:border-zinc-900 dark:bg-zinc-900 dark:shadow-none">
@@ -37,22 +51,10 @@ export default function Timeline() {
             Graduated College
           </h3>
           <time className="text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
-            May 21st, 2022
+            Feburary 15st, 2024
           </time>
           <p className="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">
-            8.2 CGPA / 3.42 GPA
-          </p>
-        </li>
-        <li className="mb-4 ml-8 rounded-md border border-gray-100 bg-white  px-4  py-4 shadow-sm shadow-gray-300 dark:border-zinc-900 dark:bg-zinc-900 dark:shadow-none">
-          <span className="absolute -left-3 flex h-6 w-6 items-center justify-center rounded-full bg-yellow-300 ring-8 ring-white dark:bg-yellow-700 dark:ring-gray-900">
-            <SiLeetcode />
-          </span>
-          <h3 className="text-base font-semibold text-gray-900 dark:text-white">Joined LeetCode</h3>
-          <time className="text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
-            Feb 2nd, 2022
-          </time>
-          <p className="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">
-            Preparing for coding interviews
+            Built a strong foundation in AI and software engineering
           </p>
         </li>
         <li className="mb-4 ml-8 rounded-md border border-gray-100 bg-white  px-4  py-4 shadow-sm shadow-gray-300 dark:border-zinc-900 dark:bg-zinc-900 dark:shadow-none">
@@ -60,13 +62,13 @@ export default function Timeline() {
             <HiOutlineDatabase />
           </span>
           <h3 className="text-base font-semibold text-gray-900 dark:text-white">
-            6 Month Internship
+            1 Year Internship
           </h3>
           <time className="text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
-            January 12th, 2022
+            July, 2021
           </time>
           <p className="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">
-            Data Engineer @ Accenture
+            Computer Vision Engineer @ SNNU Hostpital
           </p>
         </li>
         <li className="mb-4 ml-8 rounded-md border border-gray-100 bg-white  px-4  py-4 shadow-sm shadow-gray-300 dark:border-zinc-900 dark:bg-zinc-900 dark:shadow-none">
@@ -77,10 +79,10 @@ export default function Timeline() {
             First Internship
           </h3>
           <time className="text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
-            March 17th, 2021
+            June, 2020
           </time>
           <p className="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">
-            Analytics Engineer @ HOPS Healthcare
+            Data Engineer @ AI Republic, an early-stage startup
           </p>
         </li>
         <li className="mb-2 ml-8 rounded-md border border-gray-100 bg-white  px-4  py-4 shadow-sm shadow-gray-300 dark:border-zinc-900 dark:bg-zinc-900 dark:shadow-none">
@@ -89,10 +91,10 @@ export default function Timeline() {
           </span>
           <h3 className="text-base font-semibold text-gray-900 dark:text-white">Started College</h3>
           <time className="text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
-            August 20th, 2018
+            March 1th, 2018
           </time>
           <p className="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">
-            Bachelor of Technology in Computer Science
+            Bachelor of Technology in Computer Science, Hanyang University
           </p>
         </li>
         <Disclosure>

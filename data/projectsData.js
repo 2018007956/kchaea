@@ -1,5 +1,15 @@
 const projectsData = [
   {
+    title: '사내 IP 주소 통합 관리 플랫폼',
+    description: `네트워크 자원의 구조와 운영 흐름을 이해하여 관리자가 사용하기 편한 네트워크 운영 도구를 개발했습니다. 주요 기능으로는 IP 조회, IP 예약, 서브넷 생성/삭제/분할/병합, 자식 서브넷 생성, 슈퍼넷 생성, 엔티티 관리, 유저 권한 관리 등이 있습니다.`,
+    imgSrc: '',
+    href: '',
+    github: '',
+    tech1: 'Network',
+    tech2: 'Management',
+    tech3: 'Web',
+  },
+  {
     title: 'OpenStack 환경 구축',
     description: `OpenStack을 직접 구축하며 클라우드 인프라의 구조와 서비스 간 동작 원리를 이해한 프로젝트입니다. 
                 Controller, Compute, Network, Storage 노드로 구성된 환경을 수동 설치 방식으로 구축하였으며, Self-Service Network와 Floating IP를 통한 외부 통신을 구현하며 실제 클라우드 서비스 환경과 유사한 구조를 실습했습니다.`,
