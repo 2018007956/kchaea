@@ -48,7 +48,6 @@ export default function AuthorLayout({ children, frontMatter }) {
                 {text1} 문제를 구조적으로 해결하고 더 효율적인 시스템을 만드는 일에 흥미를 느낍니다.{' '}
               </RoughNotation>
             </p>
-            <br />
             <p className="hidden md:block">
               저는 사람들과 함께 지식을 공유하고 발표하는 것을 좋아하며,{' '}
               <RoughNotation
@@ -72,7 +71,6 @@ export default function AuthorLayout({ children, frontMatter }) {
                 을 중요하게 생각합니다.
               </RoughNotation>
             </p>
-            <br />
             <p>
               새로운 사람들과 새로운 프로젝트를 함께하는 일에는 항상 열려 있습니다. 이야기하고 싶은
               것이 있다면 언제든{' '}
@@ -98,9 +96,9 @@ export default function AuthorLayout({ children, frontMatter }) {
               로 편하게 연락 주세요.
             </p>
             <br />
-            <div>
+            <div className="mt-8">
               <h1>Experience</h1>
-              <div className="max-w-none pb-8 pt-2 xl:col-span-2">
+              <div className="max-w-none space-y-6 pb-8 pt-2 xl:col-span-2">
                 {experienceData.map((d) => (
                   <Experience
                     key={d.company}
@@ -116,8 +114,7 @@ export default function AuthorLayout({ children, frontMatter }) {
                 ))}
               </div>
             </div>
-            <br />
-            <div>
+            <div className="mt-8">
               <h1>Presentation</h1>
               <div className="max-w-none pb-8 pt-2 xl:col-span-2">
                 {presentationData.map((d) => (
@@ -128,6 +125,9 @@ export default function AuthorLayout({ children, frontMatter }) {
                     location={d.location}
                     date={d.date}
                     url={d.url}
+                    imgSrc={d.imgSrc}
+                    imgSrc2={d.imgSrc2}
+                    blogUrl={d.blogUrl}
                     text1={d.text1}
                     text2={d.text2}
                     text3={d.text3}
