@@ -5,6 +5,7 @@ import { BlogSEO } from '@/components/SEO'
 import Image from '@/components/Image'
 import ViewCounter from '@/components/ViewCounter'
 import Tag from '@/components/Tag'
+import TOCInline from '@/components/TOCInline'
 import siteMetadata from '@/data/siteMetadata'
 import formatDate from '@/lib/utils/formatDate'
 import Comments from '@/components/comments'
@@ -26,7 +27,7 @@ const editUrl = (fileName) => `${siteMetadata.siteRepo}/blob/master/data/blog/${
 
 const postDateTemplate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
 
-export default function PostLayout({ frontMatter, authorDetails, next, prev, children }) {
+export default function PostLayout({ frontMatter, authorDetails, next, prev, children, toc = [] }) {
   const { slug, fileName, date, title, images, tags, readingTime } = frontMatter
   const postUrl = `${siteMetadata.siteUrl}/blog/${slug}`
   return (
@@ -76,7 +77,7 @@ export default function PostLayout({ frontMatter, authorDetails, next, prev, chi
             className="divide-y divide-gray-200 pb-8 dark:divide-gray-700 xl:grid xl:grid-cols-4 xl:gap-x-6 xl:divide-y-0"
             style={{ gridTemplateRows: 'auto 1fr' }}
           >
-            <dl className="pb-10 pt-6 xl:border-b xl:border-gray-200 xl:pt-11 xl:dark:border-gray-700">
+            <dl className="pb-10 pt-6 xl:hidden">
               <dt className="sr-only">Authors</dt>
               <dd>
                 <ul className="flex justify-center space-x-8 sm:space-x-12 xl:block xl:space-x-0 xl:space-y-8">
@@ -117,6 +118,93 @@ export default function PostLayout({ frontMatter, authorDetails, next, prev, chi
                 </ul>
               </dd>
             </dl>
+            <aside className="hidden xl:row-span-2 xl:block xl:pr-4">
+              <div className="border-b border-gray-200 pb-10 pt-11 dark:border-gray-700">
+                <h2 className="sr-only">Authors</h2>
+                <ul className="space-y-8">
+                  {authorDetails.map((author) => (
+                    <li className="flex items-center" key={author.name}>
+                      <div className="flex items-center">
+                        {author.avatar && (
+                          <Image
+                            src={author.avatar}
+                            width="44px"
+                            height="44px"
+                            alt="avatar"
+                            className="h-11 w-11 rounded-full"
+                            placeholder="blur"
+                            blurDataURL="/static/images/SVG-placeholder.png"
+                          />
+                        )}
+                        <div className="ml-5">
+                          <div className="leading-tight">
+                            <div className="text-base font-bold text-gray-900 dark:text-gray-100">
+                              {author.name || 'Chaea Kim'}
+                            </div>
+                          </div>
+                          <div className="leading-tight">
+                            <Link
+                              href="/contact"
+                              className="text-base font-medium text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                              aria-label="Go to contact page"
+                            >
+                              @Contact
+                              <FiExternalLink className="-mt-0.5 ml-1 inline-block h-4 w-4" />
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="divide-y divide-gray-200 text-sm font-medium leading-5 dark:divide-gray-700">
+                {tags && (
+                  <div className="py-8">
+                    <h2 className="pb-1 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                      Tags
+                    </h2>
+                    <div className="flex flex-wrap">
+                      {tags.map((tag) => (
+                        <Tag key={tag} text={tag} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {(next || prev) && (
+                  <div className="space-y-8 py-8">
+                    {prev && (
+                      <div>
+                        <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                          Previous Article
+                        </h2>
+                        <div className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
+                          <Link href={`/blog/${prev.slug}`}>{prev.title}</Link>
+                        </div>
+                      </div>
+                    )}
+                    {next && (
+                      <div>
+                        <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                          Next Article
+                        </h2>
+                        <div className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
+                          <Link href={`/blog/${next.slug}`}>{next.title}</Link>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+              {toc.length > 0 && (
+                <div className="border-t border-gray-200 pt-8 dark:border-gray-700 xl:sticky xl:top-24 xl:max-h-[calc(100vh-6rem)] xl:overflow-y-auto">
+                  <h2 className="pb-3 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                    On this page
+                  </h2>
+                  <TOCInline toc={toc} fromHeading={2} toHeading={2} />
+                </div>
+              )}
+            </aside>
             <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0">
               <div className="prose max-w-none pb-8 pt-10 dark:prose-dark">{children}</div>
               <div className="grid place-items-center pb-6 pt-6 text-sm text-gray-700 dark:text-gray-300">
@@ -214,7 +302,7 @@ export default function PostLayout({ frontMatter, authorDetails, next, prev, chi
               </div>
               <Comments frontMatter={frontMatter} />
             </div>
-            <footer>
+            <footer className="xl:hidden">
               <div className="divide-gray-200 text-sm font-medium leading-5 dark:divide-gray-700 xl:col-start-1 xl:row-start-2 xl:divide-y">
                 {tags && (
                   <div className="py-4 xl:py-8">
