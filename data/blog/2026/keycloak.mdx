@@ -1,0 +1,154 @@
+---
+title: Keycloak으로 인증/인가 시스템 구축하기
+date: '2026-03-21'
+tags: [Dev, opensource]
+draft: false
+summary: 로컬 환경에 Keycloak 서버를 구축하는 방법 소개
+---
+
+Keycloak은 오픈소스 인증/인가(IAM) 플랫폼으로, 애플리케이션의 로그인, 사용자 관리, 권한 관리, SSO 같은 기능을 사용할 수 있다.
+이 글에서는 애플리케이션에서 인증/인가를 위해, 로컬에 Keycloak 서버를 세팅하는 방법을 소개한다.
+
+## 1. Keycloak 서버 실행
+Keycloak은 도커 이미지로 간단하게 실행할 수 있다. 아래 명령어로 로컬 환경에서 Keycloak 컨테이너를 띄운다.
+
+```
+docker run -d -p 8081:8080 --name keycloak -e KEYCLOAK_ADMIN=admin -e
+KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:24.0.3 start-dev
+```
+
+실행 되었으면 `http://localhost:8081`로 Keycloak 서버 UI 접속
+- ID : admin
+- Password : admin
+
+<img className="inline" src="/static/images/Blog/2026/keycloak.png" />
+
+
+## 2. Realm 및 Client 생성
+
+Keycloak에서 `Realm`은 사용자 계정, 권한, 로그인 방식과 같은 인증 관련 설정을 독립적으로 관리하는 영역이다.
+하나의 Keycloak 서버 안에서도 서비스별 또는 환경별로 Realm을 나누면 인증 체계를 서로 분리해서 운영할 수 있다.
+
+`Client`는 해당 Realm에 연결되는 애플리케이션을 의미한다. 
+예를 들어 프론트엔드 웹 앱이나 백엔드 API를 각각 Client로 등록할 수 있으며, 
+각 Client마다 로그인 방식, 접근 범위, 리다이렉트 주소 등을 개별적으로 설정할 수 있다.
+
+1. 좌측 상단에 Keycloak이라 써있는 드롭박스 클릭 후 -> Create realm
+2. Keycloak 드롭박스를 생성한 realm으로 선택
+3. Manage 탭 -> Create Client (ex. `ipam`)
+4. redirect url 설정
+```
+http://localhost:80/*
+http://localhost/*
+```
+5. ipam Client 설정에 client authentication 체크박스 활성화 후, 생긴 credentials 탭에서 client secret 복사해두기
+
+
+## 3. 로그인할 User 생성
+1. 좌측 Users 탭 -> User 생성
+2. 해당 User 들어가서 Credentials 탭에서 비밀번호 설정
+
+
+## 4. 백엔드 application-local.yml 수정
+- client-secret에 자신이 생성한 키 값 넣기
+```
+# ===== Security (Keycloak OAuth2) =====
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: ${KEYCLOAK_CLIENT_ID:[생성한 client명]}
+            client-secret: ${KEYCLOAK_CLIENT_SECRET:[생성한 키 값]}
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope: openid
+        provider:
+          keycloak:
+            issuer-uri: ${KEYCLOAK_SERVER:http://localhost:8081}/realms/${KEYCLOAK_REALM:[생성한 realm명]}
+            user-name-attribute: preferred_username
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_SERVER:http://localhost:8081}/realms/${KEYCLOAK_REALM:[생성한 realm명]}
+```
+
+## 5. SSO_USER 정의
+기본 사용자 정보만으로는 사번 같은 사내 식별값을 함께 전달하기 어렵기 때문에, Keycloak에 `SSO_USER`라는 사용자 속성을 추가한다.
+그리고, Keycloak에 사용자 속성을 추가하는 것만으로는 애플리케이션에 전달되지 않기 때문에, 로그인 시 발급되는 토큰에 `SSO_USER` 값이 포함되도록 따로 설정해야 한다.
+이 설정을 해두면 로그인 이후 애플리케이션에서 토큰을 통해 사용자의 `SSO_USER` 값을 확인하고, 내부 사용자 식별이나 추가 권한 처리에 활용할 수 있다.
+
+### 5-1. User Profile에 SSO_USER 속성 정의
+1. 좌측 메뉴 Realm settings 클릭
+2. 상단 탭에서 User profile 탭 클릭
+3. Create attribute 버튼 클릭
+4. 다음과 같이 설정:
+   - Attribute name: SSO_USER
+   - Display name: '사번' (또는 원하는 이름)
+   - Required field: OFF
+   - Permissions: Admin can view = ON, Admin can edit = ON, User can view = ON
+5. Save 클릭
+
+### 5-2. 사용자에게 SSO_USER 값 설정
+1. Users -> 테스트 사용자 클릭
+2. Details 탭에 SSO_USER 필드(설정한 Display name)가 나타남
+3. SSO_USER 값에 사번 입력
+4. Save 클릭
+
+### 5-3. 토큰에 SSO_USER 클레임 매핑
+User Profile에 등록한 것만으로는 토큰에 포함되지 않으므로,
+Client Scope에 Mapper를 추가해야 한다.
+1. 좌측 메뉴 Client -> 생성한 Client 클릭
+2. 상닺 탭 Client scopes 클릭
+3. `[client명]-dedicated` 클릭
+4. Configure a new mapper 클릭
+5. User Attribute 선택
+6. 다음과 같이 설정:
+   - Name: SSO_USER
+   - User Attribute: SSO_USER
+   - Token Claim Name: SSO_USER
+   - Claim JSON Type: String
+   - Add to ID token: ON
+   - Add to access token: ON
+   - Add to userinfo: ON
+7. Save 클릭
+
+
+## 6. 프론트엔드 vite.config.ts 수정
+
+`server.proxy.target` 값을 현재 개발 환경에서 사용 중인 백엔드 서버 주소로 수정한다.
+
+```
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [
+    react({
+      babel: {
+        plugins: [['babel-plugin-react-compiler']],
+      },
+    }),
+    tailwindcss(),
+  ],
+  server: {
+    host: true, // 모든 네트워크 인터페이스에서 접근 허용
+    allowedHosts: ['127.0.0.1'],
+    proxy: {
+      // SSE 전용 (타임아웃 비활성화) - 반드시 /api 보다 먼저!
+      '/api/sse': {
+        target: 'http://localhost:80',
+        changeOrigin: true,
+        timeout: 0, // SSE 연결 유지를 위해 타임아웃 비활성화
+      },
+      // 백엔드 context-path가 /api 이므로 rewrite 없이 그대로 전달
+      // Keycloak redirect URI: http://localhost:80/api/*
+      '/api': {
+        target: 'http://localhost:80',
+        changeOrigin: true,
+      },
+    },
+  },
+}
+```
