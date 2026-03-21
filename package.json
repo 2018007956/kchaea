@@ -8,13 +8,20 @@
     "url": "https://kchaea.vercel.app/"
   },
   "scripts": {
+    "predev": "node ./scripts/patch-next-jsonwebtoken.js",
     "start": "cross-env SOCKET=true node ./scripts/next-remote-watch.js ./data",
-    "dev": "next dev",
+    "prebuild": "node ./scripts/patch-next-jsonwebtoken.js",
+    "dev": "cross-env WATCHPACK_POLLING=true next dev",
+    "preserve": "node ./scripts/patch-next-jsonwebtoken.js",
     "build": "next build && node ./scripts/generate-sitemap",
+    "preanalyze": "node ./scripts/patch-next-jsonwebtoken.js",
     "serve": "next start",
     "analyze": "cross-env ANALYZE=true next build",
     "lint": "next lint --fix --dir pages --dir components --dir lib --dir layouts --dir scripts",
     "prepare": "husky install"
+  },
+  "engines": {
+    "node": "20.x"
   },
   "license": "MIT",
   "repository": {

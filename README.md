@@ -19,6 +19,16 @@
 
 ## 🛠 Settings
 
+- **recommended node version**
+
+```txt
+20
+```
+
+- **dev server note**
+
+`npm run dev` runs with `WATCHPACK_POLLING=true` to avoid `EMFILE: too many open files` watcher errors in local development.
+
 - **environment variables** (local path : `.env.local`)
 
 ```txt
