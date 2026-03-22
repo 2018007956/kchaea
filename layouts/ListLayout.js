@@ -5,7 +5,14 @@ import formatDate from '@/lib/utils/formatDate'
 import siteMetadata from '@/data/siteMetadata'
 import Pagination from '@/components/Pagination'
 
-export default function ListLayout({ posts, title, initialDisplayPosts = [], pagination }) {
+export default function ListLayout({
+  posts,
+  title,
+  initialDisplayPosts = [],
+  pagination,
+  headerExtra,
+  headerAction,
+}) {
   const [searchValue, setSearchValue] = useState('')
   const [groupBy, setGroupBy] = useState('none') // none | year
   const filteredBlogPosts = posts.filter((frontMatter) => {
@@ -48,28 +55,96 @@ export default function ListLayout({ posts, title, initialDisplayPosts = [], pag
             {title}
           </h1>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div className="relative w-full max-w-lg">
-              <input
-                aria-label="Search articles"
-                type="text"
-                onChange={(e) => setSearchValue(e.target.value)}
-                placeholder="Search articles"
-                className="block w-full rounded-md border border-gray-400 bg-white px-4 py-2 text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-900 dark:bg-gray-800 dark:text-gray-100"
-              />
-              <svg
-                className="absolute right-3 top-3 h-5 w-5 text-gray-400 dark:text-gray-300"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
+            <div className="flex flex-1 items-center gap-2">
+              <div className="flex w-full max-w-[34.75rem] flex-shrink-0 items-center gap-2">
+                <div className="relative min-w-0 flex-1">
+                  <input
+                    aria-label="Search articles"
+                    type="text"
+                    onChange={(e) => setSearchValue(e.target.value)}
+                    placeholder="Search articles"
+                    className="block w-full rounded-md border border-gray-400 bg-white px-4 py-2 text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-900 dark:bg-gray-800 dark:text-gray-100"
+                  />
+                  <svg
+                    className="absolute right-3 top-3 h-5 w-5 text-gray-400 dark:text-gray-300"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                  </svg>
+                </div>
+                {title === 'Tags' ? (
+                  <Link
+                    href="/blog"
+                    className="flex-shrink-0 rounded-md p-2 text-gray-500 transition hover:bg-gray-100 hover:text-primary-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-primary-400"
+                    aria-label="Blog"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2}
+                      stroke="currentColor"
+                      className="h-5 w-5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M13.172 2a2 2 0 0 1 1.414.586l6.71 6.71a2.4 2.4 0 0 1 0 3.408l-4.592 4.592a2.4 2.4 0 0 1-3.408 0l-6.71-6.71A2 2 0 0 1 6 9.172V3a1 1 0 0 1 1-1z"
+                        opacity=".5"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M2 7v6.172a2 2 0 0 0 .586 1.414l6.71 6.71a2.4 2.4 0 0 0 3.191.193"
+                        opacity=".5"
+                      />
+                      <circle cx="10.5" cy="6.5" r=".5" fill="currentColor" opacity=".5" />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2.5}
+                        d="M5 19L19 5"
+                      />
+                    </svg>
+                  </Link>
+                ) : (
+                  <Link
+                    href="/tags"
+                    className="flex-shrink-0 rounded-md p-2 text-gray-500 transition hover:bg-gray-100 hover:text-primary-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-primary-400"
+                    aria-label="Tags"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2}
+                      stroke="currentColor"
+                      className="h-5 w-5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M13.172 2a2 2 0 0 1 1.414.586l6.71 6.71a2.4 2.4 0 0 1 0 3.408l-4.592 4.592a2.4 2.4 0 0 1-3.408 0l-6.71-6.71A2 2 0 0 1 6 9.172V3a1 1 0 0 1 1-1z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M2 7v6.172a2 2 0 0 0 .586 1.414l6.71 6.71a2.4 2.4 0 0 0 3.191.193"
+                      />
+                      <circle cx="10.5" cy="6.5" r=".5" fill="currentColor" />
+                    </svg>
+                  </Link>
+                )}
+              </div>
+              {headerAction}
             </div>
 
             <div className="flex items-center justify-between gap-2 sm:justify-end">
@@ -85,6 +160,7 @@ export default function ListLayout({ posts, title, initialDisplayPosts = [], pag
             </div>
           </div>
         </div>
+        {headerExtra}
         {!filteredBlogPosts.length && <div className="py-12 text-sm">No posts found.</div>}
 
         {groupBy === 'year' ? (
