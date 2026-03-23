@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import { PageSEO } from '@/components/SEO'
 import siteMetadata from '@/data/siteMetadata'
 import { getAllTags } from '@/lib/tags'
@@ -16,7 +17,15 @@ export async function getStaticProps() {
 }
 
 export default function Tags({ tags, posts }) {
+  const router = useRouter()
   const [selectedTags, setSelectedTags] = useState(new Set())
+
+  useEffect(() => {
+    const { tag } = router.query
+    if (tag) {
+      setSelectedTags(new Set([tag]))
+    }
+  }, [router.query])
   const sortedTags = Object.keys(tags).sort((a, b) => tags[b] - tags[a])
 
   const toggleTag = (tag) => {
