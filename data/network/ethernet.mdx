@@ -1,12 +1,12 @@
 ---
 title: Ethernet
 date: '2026-04-07'
-tags: [Network]
 draft: false
-summary:
 ---
 
-<img className="inline" src="/static/images/Network/ethernet_adapter.jpg" width="400"/>
+<div style={{ display: 'flex', justifyContent: 'center' }}>
+  <img className="inline" src="/static/images/Network/ethernet_adapter.jpg" width="400" />
+</div>
 
 유선 네트워크에 연결하기 위해 이더넷 어댑터를 지급받았다.  
 어댑터의 맥 주소를 알려드리고, IP와 서브넷 마스크, 게이트웨이, DNS 정보를 수동으로 입력했더니 인터넷 연결이 되었다.
@@ -16,20 +16,24 @@ summary:
 여기서 보이는 `10/100`은 해당 LAN포트(어댑터)가 지원하는 네트워크 속도(대역폭)을 의미한다.
 즉, 이 장치는 자동으로 상대 장비와 맞춰서 (Auto Negotiation), 10Mbps 또는 100Mbps 속도로 통신하는 네트워크 인터페이스라는 뜻이다.
 
-<img className="inline" src="/static/images/Network/ethernet_speed.png" />
+<div style={{ display: 'flex', justifyContent: 'center' }}>
+    <img className="inline" src="/static/images/Network/ethernet_speed.png" />
+</div>
 
 하드웨어 탭에서 '속도'를 보면 `100baseTX`라고 적혀있는데, 이 이름은 `통신속도/채널종류/케이블종류`를 의미한다.
 100baseTX는 Category 5 UTP 케이블을 사용하며 최대 거리는 100미터, 전송 속도는 100Mbps짜리 케이블이다.
 
 100Mbps면 무선보다 느리지 않을까해서 속도 비교를 해보았는데, 역시나 무선이 3배정도나 빨랐다.
-<img className="inline" src="/static/images/Network/ethernet_compare.png" />
+<div style={{ display: 'flex', justifyContent: 'center' }}>
+    <img className="inline" src="/static/images/Network/ethernet_compare.png" />
+</div>
 원래는 유선이 더 빨라야하는게 맞지만 어댑터의 최대 속도가 낮아서 무선보다 느린 것이다.  
 쩝.. 티켓팅할 때는 무선으로 해야겠다.
 
 이왕 장비를 받아 세팅을 한 김에 '이더넷'에 대해 공부해보았다.
 
 # Ethernet
-이더넷은 장치가 근거리 통신망 내에서 통신할 수 있도록 하는 유선 네트워킹 기술이다. 네트워킹 기술에는 이더넷 외에도 토큰링, FDDI, ATM 등이 있다.
+이더넷은 <mark>장치가 근거리 통신망 내에서 통신할 수 있도록 하는 유선 네트워킹 기술</mark>이다. 네트워킹 기술에는 이더넷 외에도 토큰링, PPP, FDDI, ATM 등이 있다.
 이 가운데 오늘날 가장 널리 사용되는 것은 이더넷이며, 초기 이더넷에서는 CSMA/CD(Carrier Sense Multiple Access/Collision Detection) 방식으로 여러 장치의 전송 충돌을 관리했다.
 
 CSMA/CD는 여러 장치가 하나의 선로를 함께 사용할 때, 먼저 통신 중인 사람이 있는지 듣고(Carrier Sense), 비어 있으면 데이터를 보내며(Multiple Access), 
@@ -38,8 +42,10 @@ CSMA/CD는 여러 장치가 하나의 선로를 함께 사용할 때, 먼저 통
 다만 요즘은 허브보다 스위치를 사용하고, 송신과 수신을 동시에 할 수 있는 `Full Duplex` 환경이 일반적이어서 실제로 충돌이 거의 발생하지 않는다. 
 그래서 현대의 이더넷에서는 CSMA/CD 자체보다도 링크 속도, Auto Negotiation, MAC 주소, 스위치 연결 같은 개념이 더 자주 등장한다.
 
-이더넷 장비에는 각각 고유한 MAC 주소가 있는데, 같은 LAN 안에서는 이 MAC 주소를 기준으로 장비를 구분하고 프레임을 전달한다. 
-어댑터의 MAC 주소를 알려드렸던 것도, 네트워크에서 이 장치를 식별하기 위해서이다.
+이더넷은 2계층(데이터 링크 계층) 프로토콜이다. 
+데이터 링크 계층은 같은 네트워크 구간 안에서 데이터를 프레임(frame) 단위로 전달하며, 이때 장치를 구분하는 기준이 MAC 주소이다. 
+케이블이 연결되어 링크가 형성되면, 같은 LAN 안에서 어느 장치로 프레임을 보낼지 ARP를 통해 결정되고, 이더넷이 목적지 MAC 주소로 프레임을 전달한다.
+어댑터의 MAC 주소를 알려드렸던 것도, 네트워크에서 이 장치를 식별하고 어떤 장비가 해당 포트에 연결되는지 관리하기 위해서이다.
 
 # 통신 과정
 이더넷이 장치를 연결하고 통신하는 과정은 생각보다 단순하다. 
@@ -47,12 +53,15 @@ CSMA/CD는 여러 장치가 하나의 선로를 함께 사용할 때, 먼저 통
 <img className="inline" src="/static/images/Network/ethernet_flow.png" alt="이더넷 통신 과정 다이어그램" />
 
 먼저 컴퓨터의 이더넷 어댑터와 스위치(또는 공유기)의 포트를 UTP 케이블로 물리적으로 연결한다. 
-케이블이 꽂히면 양쪽 장비는 전기 신호를 주고받으면서 링크가 살아 있는지 확인하고, 서로 어떤 속도와 방식으로 통신할지 협상한다. 이것이 Auto Negotiation이다. 
+케이블이 꽂히면 양쪽 장비는 전기 신호를 주고받으면서 링크가 살아 있는지 확인하고, 서로 어떤 속도와 방식으로 통신할지 협상한다. 이것이 **Auto Negotiation**이다. 
 이 과정이 끝나면 `10Mbps`, `100Mbps`, `1Gbps` 같은 링크 속도와 `Half Duplex` 또는 `Full Duplex` 여부가 결정되고, 그다음부터 실제 데이터 송수신이 가능해진다.
 
-링크가 만들어졌다고 해서 바로 인터넷이 되는 것은 아니다. 이더넷은 기본적으로 같은 LAN 안에서 프레임(frame)이라는 단위로 데이터를 전달한다. 
-프레임 안에는 출발지 MAC 주소와 목적지 MAC 주소가 들어간다. 예를 들어 내 PC가 같은 사무실 안의 다른 장비와 통신하려고 하면, 먼저 누구에게 보낼지 목적지 MAC 주소를 알아야 한다. 
-이때 사용하는 것이 ARP(Address Resolution Protocol)이다. 내가 알고 있는 것은 보통 IP 주소이기 때문에, "이 IP를 가진 장비의 MAC 주소는 무엇인가?"를 LAN 전체에 묻고, 
+링크가 만들어졌다고 해서 바로 인터넷이 되는 것은 아니다. 이더넷은 기본적으로 같은 LAN 안에서 프레임이라는 단위로 데이터를 전달한다. 
+프레임 안에는 출발지 MAC 주소와 목적지 MAC 주소가 들어간다. 
+<img className="inline" src="/static/images/Network/ethernet_frame.png"/>
+
+예를 들어 내 PC가 같은 사무실 안의 다른 장비와 통신하려고 하면, 먼저 누구에게 보낼지 목적지 MAC 주소를 알아야 한다. 
+이때 사용하는 것이 **ARP(Address Resolution Protocol)** 이다. 내가 알고 있는 것은 보통 IP 주소이기 때문에, "이 IP를 가진 장비의 MAC 주소는 무엇인가?"를 LAN 전체에 묻고, 
 해당 장비가 자신의 MAC 주소를 응답하면 그제서야 이더넷 프레임을 만들어 전송할 수 있다.
 
 스위치는 이렇게 전달된 프레임을 보고 목적지 MAC 주소가 어느 포트에 연결된 장치인지 판단해서 해당 포트로만 내보낸다. 
@@ -61,9 +70,9 @@ CSMA/CD는 여러 장치가 하나의 선로를 함께 사용할 때, 먼저 통
 그래서 같은 LAN 안에서는 스위치가 일종의 교통정리 역할을 하며 각 장치 사이의 통신을 이어준다.
 
 인터넷 통신은 여기서 한 단계 더 올라간다. 내가 웹사이트에 접속할 때는 최종 목적지가 같은 LAN 안에 있는 장비가 아니라 외부 네트워크에 있기 때문에, 
-내 PC는 데이터를 기본 게이트웨이(보통 공유기) 쪽으로 보낸다. 이때 IP 계층에서는 목적지가 외부 서버의 IP 주소이지만, 
-이더넷 계층에서는 우선 같은 LAN 안에 있는 게이트웨이의 MAC 주소를 목적지로 삼아 프레임을 만든다. 
-즉 이더넷은 "바로 옆 구간"까지 데이터를 안전하게 전달하고, IP는 그보다 더 넓은 네트워크에서 어디로 가야 하는지를 결정하는 역할을 맡는다.
+내 PC는 데이터를 기본 게이트웨이(보통 공유기) 쪽으로 보낸다. 이때 **IP 계층에서는 목적지가 외부 서버의 IP 주소이지만, 
+이더넷 계층에서는 우선 같은 LAN 안에 있는 게이트웨이의 MAC 주소를 목적지로 삼아 프레임을 만든다.**
+즉 이더넷은 같은 LAN 내에서 프레임을 전달하고, IP는 그보다 더 넓은 네트워크에서 어디로 가야 하는지를 결정하는 역할을 맡는다.
 
 정리하면, 이더넷은 케이블과 포트로 물리적인 연결을 만들고, MAC 주소를 이용해 같은 LAN 안에서 누구에게 데이터를 보낼지 결정하며, 스위치는 그 프레임을 알맞은 포트로 전달한다. 
 그리고 그 위에 IP, 서브넷 마스크, 게이트웨이, DNS 같은 설정이 올라가면 인터넷까지 사용할 수 있다. 
