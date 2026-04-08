@@ -34,6 +34,10 @@ export async function getStaticProps({ params }) {
 
 export default function NetworkPost({ post, authorDetails, prev, next }) {
   const { mdxSource, toc, frontMatter } = post
+  const networkFrontMatter = {
+    ...frontMatter,
+    showSidebar: false,
+  }
 
   return (
     <>
@@ -42,7 +46,7 @@ export default function NetworkPost({ post, authorDetails, prev, next }) {
           layout={frontMatter.layout || DEFAULT_LAYOUT}
           toc={toc}
           mdxSource={mdxSource}
-          frontMatter={frontMatter}
+          frontMatter={networkFrontMatter}
           authorDetails={authorDetails}
           prev={prev}
           next={next}
