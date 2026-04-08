@@ -37,16 +37,22 @@ const TOCInline = ({
       heading.depth >= fromHeading && heading.depth <= toHeading && !re.test(heading.value)
   )
 
+  const hasMultipleDepths = new Set(filteredToc.map((h) => h.depth)).size > 1
+
   const tocList = (
     <ul className="space-y-3 text-sm">
       {filteredToc.map((heading) => (
         <li
           key={`${heading.value}-${heading.url}`}
-          className={heading.depth >= indentDepth ? 'ml-4' : ''}
+          className={hasMultipleDepths && heading.depth >= indentDepth ? 'ml-4' : ''}
         >
           <a
             href={heading.url}
-            className="text-gray-600 transition-colors hover:text-primary-500 dark:text-gray-400 dark:hover:text-primary-400"
+            className={`transition-colors hover:text-primary-500 dark:hover:text-primary-400 ${
+              hasMultipleDepths && heading.depth < indentDepth
+                ? 'font-semibold text-gray-800 dark:text-gray-200'
+                : 'text-gray-600 dark:text-gray-400'
+            }`}
           >
             {heading.value}
           </a>

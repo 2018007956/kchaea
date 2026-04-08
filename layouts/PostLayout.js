@@ -201,7 +201,7 @@ export default function PostLayout({ frontMatter, authorDetails, next, prev, chi
                   <h2 className="pb-3 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
                     On this page
                   </h2>
-                  <TOCInline toc={toc} fromHeading={2} toHeading={2} />
+                  <TOCInline toc={toc} fromHeading={1} toHeading={2} indentDepth={2} />
                 </div>
               )}
             </aside>
