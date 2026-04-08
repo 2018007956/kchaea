@@ -4,57 +4,57 @@ import { PageSEO } from '@/components/SEO'
 import Link from '@/components/Link'
 
 const BOOK_COLORS = [
-  '#6366f1',
-  '#8b5cf6',
-  '#a78bfa',
-  '#7c3aed',
-  '#c084fc',
-  '#059669',
-  '#10b981',
-  '#34d399',
-  '#047857',
-  '#0d9488',
-  '#dc2626',
-  '#ef4444',
-  '#f87171',
-  '#b91c1c',
-  '#e11d48',
-  '#d97706',
-  '#f59e0b',
-  '#ea580c',
-  '#0284c7',
-  '#2563eb',
+  { bg: '#2d3748', accent: '#4a5568' },
+  { bg: '#1a365d', accent: '#2a4a7f' },
+  { bg: '#234e52', accent: '#2c7a7b' },
+  { bg: '#3c366b', accent: '#553c9a' },
+  { bg: '#1e3a5f', accent: '#2b6cb0' },
+  { bg: '#2a4365', accent: '#3182ce' },
+  { bg: '#22543d', accent: '#38a169' },
+  { bg: '#44337a', accent: '#6b46c1' },
+  { bg: '#1a202c', accent: '#2d3748' },
+  { bg: '#285e61', accent: '#319795' },
+  { bg: '#4a2040', accent: '#7b3f6e' },
+  { bg: '#2d3e50', accent: '#4a6785' },
 ]
 
 function Book({ title, href, index }) {
   const isLinked = !!href
-  const color = BOOK_COLORS[index % BOOK_COLORS.length]
+  const palette = BOOK_COLORS[index % BOOK_COLORS.length]
 
   const spine = (
     <div
-      className={`group relative flex h-36 w-10 flex-shrink-0 items-center justify-center rounded-sm transition-all duration-200 sm:h-40 sm:w-11 md:h-44 md:w-12 ${
+      className={`group relative flex h-36 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-[3px] transition-all duration-300 sm:h-40 sm:w-11 md:h-44 md:w-12 ${
         isLinked
-          ? 'cursor-pointer hover:-translate-y-1 hover:shadow-lg'
-          : 'cursor-default opacity-40'
+          ? 'cursor-pointer hover:-translate-y-2 hover:shadow-xl'
+          : 'cursor-default opacity-30'
       }`}
       style={{
-        backgroundColor: color,
+        backgroundColor: palette.bg,
         boxShadow: isLinked
-          ? '2px 2px 6px rgba(0,0,0,0.25), inset -1px 0 3px rgba(0,0,0,0.1)'
-          : '1px 1px 3px rgba(0,0,0,0.15)',
+          ? '1px 1px 4px rgba(0,0,0,0.2), inset -2px 0 4px rgba(0,0,0,0.15)'
+          : '1px 1px 2px rgba(0,0,0,0.1)',
       }}
     >
       <div
-        className="absolute left-0 top-0 h-full w-[3px] rounded-l-sm"
-        style={{ backgroundColor: 'rgba(0,0,0,0.12)' }}
+        className="absolute left-0 top-0 h-full w-[3px]"
+        style={{
+          background: `linear-gradient(to right, ${palette.accent}44, transparent)`,
+        }}
       />
+
       <div
-        className="absolute right-0 top-0 h-full w-[2px] rounded-r-sm"
-        style={{ backgroundColor: 'rgba(0,0,0,0.08)' }}
+        className="absolute right-0 top-0 h-full w-[2px]"
+        style={{ backgroundColor: 'rgba(255,255,255,0.04)' }}
+      />
+
+      <div
+        className="absolute bottom-3 left-1/2 top-3 w-[1px] -translate-x-1/2 sm:bottom-4 sm:top-4"
+        style={{ backgroundColor: `${palette.accent}33` }}
       />
 
       <span
-        className="select-none text-[10px] font-semibold leading-tight text-white sm:text-[11px]"
+        className="relative z-10 select-none text-[10px] font-medium tracking-wide text-white/90 sm:text-[11px] md:text-xs"
         style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
       >
         {title}
@@ -62,9 +62,9 @@ function Book({ title, href, index }) {
 
       {isLinked && (
         <div
-          className="pointer-events-none absolute inset-0 rounded-sm opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
           style={{
-            background: 'linear-gradient(180deg, rgba(255,255,255,0.12) 0%, transparent 60%)',
+            background: `linear-gradient(180deg, ${palette.accent}22 0%, transparent 50%)`,
           }}
         />
       )}
@@ -102,7 +102,7 @@ export default function Network() {
         title={`Network - ${siteMetadata.author}`}
         description="네트워크 개념을 하나씩 채워가는 책장"
       />
-      <div className="mx-auto max-w-6xl divide-y divide-gray-400">
+      <div className="mx-auto max-w-6xl divide-y divide-gray-200 dark:divide-gray-700">
         <div className="space-y-2 pb-8 pt-6 md:space-y-5">
           <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
             Network
@@ -114,15 +114,23 @@ export default function Network() {
 
         <div className="py-12">
           <div className="relative">
-            <div className="flex flex-wrap items-end gap-1.5 pb-0 sm:gap-2">
+            <div className="flex flex-wrap items-end gap-[6px] sm:gap-2">
               {sortedBooks.map((book, i) => (
                 <Book key={book.title} title={book.title} href={book.href} index={i} />
               ))}
             </div>
 
             <div className="relative mt-0">
-              <div className="h-2.5 rounded-sm bg-gradient-to-b from-amber-800 to-amber-900 shadow-md dark:from-amber-900 dark:to-amber-950" />
-              <div className="h-1 bg-gradient-to-b from-amber-900/40 to-transparent dark:from-amber-950/40" />
+              <div
+                className="h-3 rounded-sm shadow-sm"
+                style={{ background: 'linear-gradient(to bottom, #8B7355, #6B5B45)' }}
+              />
+              <div
+                className="h-[3px]"
+                style={{
+                  background: 'linear-gradient(to bottom, rgba(107,91,69,0.3), transparent)',
+                }}
+              />
             </div>
           </div>
         </div>
