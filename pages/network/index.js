@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import siteMetadata from '@/data/siteMetadata'
 import networkData from '@/data/networkData'
 import { PageSEO } from '@/components/SEO'
@@ -18,20 +19,24 @@ const BOOK_COLORS = [
   { bg: '#2d3e50', accent: '#4a6785' },
 ]
 
-function Book({ title, href, index }) {
+function Book({ title, href, index, highlighted }) {
   const isLinked = !!href
   const palette = BOOK_COLORS[index % BOOK_COLORS.length]
 
   const spine = (
     <div
       className={`group relative flex h-36 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-[3px] transition-all duration-300 sm:h-40 sm:w-11 md:h-44 md:w-12 ${
-        isLinked
+        highlighted
+          ? '-translate-y-3 shadow-lg'
+          : isLinked
           ? 'cursor-pointer hover:-translate-y-2 hover:shadow-xl'
           : 'cursor-default opacity-30'
       }`}
       style={{
         backgroundColor: palette.bg,
-        boxShadow: isLinked
+        boxShadow: highlighted
+          ? `1px 1px 8px rgba(0,0,0,0.3), inset -2px 0 4px rgba(0,0,0,0.15)`
+          : isLinked
           ? '1px 1px 4px rgba(0,0,0,0.2), inset -2px 0 4px rgba(0,0,0,0.15)'
           : '1px 1px 2px rgba(0,0,0,0.1)',
       }}
@@ -54,7 +59,7 @@ function Book({ title, href, index }) {
       />
 
       <span
-        className="relative z-10 select-none text-[10px] font-medium tracking-wide text-white/90 sm:text-[11px] md:text-xs"
+        className="relative z-10 select-none text-[10px] font-semibold tracking-wide text-white/90 sm:text-[11px] md:text-xs"
         style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
       >
         {title}
@@ -83,6 +88,8 @@ function Book({ title, href, index }) {
 }
 
 export default function Network() {
+  const [searchValue, setSearchValue] = useState('')
+
   const sortedBooks = [...networkData].sort((a, b) => {
     const aHasContent = Boolean(a.href)
     const bHasContent = Boolean(b.href)
@@ -110,13 +117,46 @@ export default function Network() {
           <p className="text-md leading-7 text-gray-500 dark:text-gray-400">
             네트워크 개념을 하나씩 채워가는 책장
           </p>
+          <div className="relative max-w-lg">
+            <input
+              aria-label="Search"
+              type="text"
+              onChange={(e) => setSearchValue(e.target.value)}
+              placeholder="Search books"
+              className="block w-full rounded-md border border-gray-400 bg-white px-4 py-2 text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-900 dark:bg-gray-800 dark:text-gray-100"
+            />
+            <svg
+              className="absolute right-3 top-3 h-5 w-5 text-gray-400 dark:text-gray-300"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </div>
         </div>
 
         <div className="py-12">
           <div className="relative">
             <div className="flex flex-wrap items-end gap-[6px] sm:gap-2">
               {sortedBooks.map((book, i) => (
-                <Book key={book.title} title={book.title} href={book.href} index={i} />
+                <Book
+                  key={book.title}
+                  title={book.title}
+                  href={book.href}
+                  index={i}
+                  highlighted={
+                    searchValue.length > 0 &&
+                    !!book.href &&
+                    book.title.toLowerCase().includes(searchValue.toLowerCase())
+                  }
+                />
               ))}
             </div>
 
