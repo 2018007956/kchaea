@@ -28,8 +28,19 @@ const editUrl = (fileName) => `${siteMetadata.siteRepo}/blob/master/data/blog/${
 const postDateTemplate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
 
 export default function PostLayout({ frontMatter, authorDetails, next, prev, children, toc = [] }) {
-  const { slug, fileName, date, title, images, tags, readingTime, showSidebar = true } = frontMatter
-  const postUrl = `${siteMetadata.siteUrl}/blog/${slug}`
+  const {
+    slug,
+    fileName,
+    date,
+    title,
+    images,
+    tags,
+    readingTime,
+    showSidebar = true,
+    contentType,
+  } = frontMatter
+  const isNetwork = contentType === 'network'
+  const postUrl = `${siteMetadata.siteUrl}/${isNetwork ? 'network' : 'blog'}/${slug}`
   const hasAuthors = authorDetails.length > 0
   const hasTags = tags && tags.length > 0
   const hasToc = toc.length > 0
@@ -315,6 +326,14 @@ export default function PostLayout({ frontMatter, authorDetails, next, prev, chi
                 </div>
               </div>
               <Comments frontMatter={frontMatter} />
+              <div className="hidden border-t-0 pt-4 xl:block xl:pt-8">
+                <Link
+                  href={isNetwork ? '/network' : '/blog'}
+                  className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                >
+                  &larr; {isNetwork ? 'Back to the bookshelf' : 'Back to the blog'}
+                </Link>
+              </div>
             </div>
             <footer className="xl:hidden">
               <div className="divide-gray-200 text-sm font-medium leading-5 dark:divide-gray-700 xl:col-start-1 xl:row-start-2 xl:divide-y">
@@ -355,12 +374,12 @@ export default function PostLayout({ frontMatter, authorDetails, next, prev, chi
                   </div>
                 )}
               </div>
-              <div className="pt-4 xl:pt-8">
+              <div className="pt-4">
                 <Link
-                  href="/blog"
+                  href={isNetwork ? '/network' : '/blog'}
                   className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
                 >
-                  &larr; Back to the blog
+                  &larr; {isNetwork ? 'Back to the bookshelf' : 'Back to the blog'}
                 </Link>
               </div>
             </footer>

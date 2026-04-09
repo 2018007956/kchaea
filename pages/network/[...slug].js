@@ -37,6 +37,7 @@ export default function NetworkPost({ post, authorDetails, prev, next }) {
   const networkFrontMatter = {
     ...frontMatter,
     showSidebar: false,
+    contentType: 'network',
   }
 
   return (
