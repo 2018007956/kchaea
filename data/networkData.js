@@ -4,6 +4,14 @@ const networkData = [
     href: '/network/ethernet',
   },
   {
+    title: 'Subnetting',
+    href: '/network/subnetting',
+  },
+  {
+    title: 'IP',
+    href: '/network/ip',
+  },
+  {
     title: 'DNS',
     href: null,
   },
@@ -13,10 +21,6 @@ const networkData = [
   },
   {
     title: 'OSI 7 Layer',
-    href: null,
-  },
-  {
-    title: 'Subnetting',
     href: null,
   },
   {
@@ -45,7 +49,7 @@ const networkData = [
   },
   {
     title: 'VLAN',
-    href: null,
+    href: '/network/vlan',
   },
 ]
 
