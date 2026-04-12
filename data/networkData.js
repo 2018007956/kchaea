@@ -25,7 +25,7 @@ const networkData = [
   },
   {
     title: 'Routing',
-    href: null,
+    href: '/network/routing',
   },
   {
     title: 'Switching',
@@ -50,6 +50,10 @@ const networkData = [
   {
     title: 'VLAN',
     href: '/network/vlan',
+  },
+  {
+    title: 'VRF',
+    href: '/network/vrf',
   },
 ]
 
