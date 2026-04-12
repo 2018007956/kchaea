@@ -109,7 +109,7 @@ export default function Network() {
         title={`Network - ${siteMetadata.author}`}
         description="네트워크 개념을 하나씩 채워가는 책장"
       />
-      <div className="mx-auto max-w-6xl divide-y divide-gray-200 dark:divide-gray-700">
+      <div className="mx-auto max-w-6xl">
         <div className="space-y-2 pb-8 pt-6 md:space-y-5">
           <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
             Network
@@ -142,7 +142,7 @@ export default function Network() {
           </div>
         </div>
 
-        <div className="py-12">
+        <div className="pb-12 pt-4">
           <div className="relative">
             <div className="flex flex-wrap items-end gap-[6px] sm:gap-2">
               {sortedBooks.map((book, i) => (

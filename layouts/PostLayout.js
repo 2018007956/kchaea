@@ -191,7 +191,7 @@ export default function PostLayout({ frontMatter, authorDetails, next, prev, chi
                       </div>
                     </div>
                   )}
-                  {(next || prev) && (
+                  {!isNetwork && (next || prev) && (
                     <div className="space-y-8 py-8">
                       {prev && (
                         <div>
@@ -349,7 +349,7 @@ export default function PostLayout({ frontMatter, authorDetails, next, prev, chi
                     </div>
                   </div>
                 )}
-                {(next || prev) && (
+                {!isNetwork && (next || prev) && (
                   <div className="flex justify-between py-4 xl:block xl:space-y-8 xl:py-8">
                     {prev && (
                       <div>
