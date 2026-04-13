@@ -1,0 +1,19 @@
+---
+title: RIB / FIB
+date: '2026-04-13'
+draft: false
+---
+
+## RIB (Routing Information Base)
+connected, static, ospf 등의 프로토콜을 통해 알아낸 모든 정보
+
+## FIB (Forwarding Information Base)  
+실제 forwarding 시 사용되는 정보  
+RIB에서 AD값과 longest match 등을 적용하여 FIB를 산출함
+
+<img className="inline" src="/static/images/Network/rib-fib.png" />
+
+라우터는 RIB 테이블을 일일이 참조하지 않고 HW 자체적으로 forwarding 할 수 있도록 FIB 테이블을 생성한다.
+
+이를 통해 Adjacency L2 헤더를 만드는데, 헤더의 destination ip만을 보고 바로 forwarding 할 수 있게 한다.  
+→ Cisco의 CEF 기술

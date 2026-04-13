@@ -24,12 +24,16 @@ const networkData = [
     href: null,
   },
   {
-    title: 'Routing',
-    href: '/network/routing',
+    title: 'Routing Priority',
+    href: '/network/routing_priority',
+  },
+  {
+    title: 'Routing Protocol',
+    href: '/network/routing_protocol',
   },
   {
     title: 'Switching',
-    href: null,
+    href: '/network/switching',
   },
   {
     title: 'HTTP',
@@ -54,6 +58,18 @@ const networkData = [
   {
     title: 'VRF',
     href: '/network/vrf',
+  },
+  {
+    title: 'AS',
+    href: '/network/as',
+  },
+  {
+    title: 'Convergence',
+    href: '/network/convergence',
+  },
+  {
+    title: 'RIB / FIB',
+    href: '/network/rib-fib',
   },
 ]
 

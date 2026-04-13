@@ -1,0 +1,28 @@
+---
+title: Routing Protocol
+date: '2026-04-13'
+draft: false
+---
+
+<img className="inline" src="/static/images/Network/routing_protocols.png" />
+
+## RIP (Routing Information Protocol)
+- **UDP** 기반 (출발지, 목적지 Port: 520)
+- **RIP이 활성화된 모든 Interface로 약 30초 주기** 로 RIP **FULL-Database** 상호 교환
+   - 실제 25.5~34.5초 주기 (15% random jitter: 30*0.15=4.5초)
+   - (일정시간 간격으로) Routing table 변화가 없더라도 전달함
+   - 변경된 정보가 전달되는데 시간이 느림 (**Slow Convergence Time**)
+   - 그래서 네트워크 Hop수를 최대 15hops로 제한 (즉 16=infinit)
+- **1번에 최대 25개 Entry만 전송 가능** (비효율적)
+   - 여러 update 메시지 필요(25개 넘으면 여러개로 분할해서 전송필요)
+   - 느린 Convergence time: 전체 동기화 시간 느림
+   - 그래서 소규모 망에 적합
+
+## EIGRP (Enhanced Interior Gateway Routing Protocol)
+
+
+## OSPF (Open Shortest Path First)
+
+
+## BGP (Border Gateway Protocol)
+
