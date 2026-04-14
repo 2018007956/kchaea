@@ -1,0 +1,37 @@
+---
+title: RIP
+date: '2026-04-14'
+draft: false
+---
+
+## RIP (Routing Information Protocol)
+- **UDP** 기반 (출발지, 목적지 Port: 520)
+- **RIP이 활성화된 모든 Interface로 약 30초 주기** 로 RIP **FULL-Database** 상호 교환
+   - 실제 25.5~34.5초 주기 (15% random jitter: 30*0.15=4.5초)
+   - (일정시간 간격으로) Routing table 변화가 없더라도 전달함
+   - 변경된 정보가 전달되는데 시간이 느림 (**Slow Convergence Time**)
+   - 그래서 네트워크 Hop수를 최대 15hops로 제한 (즉 16=infinit)
+- **1번에 최대 25개 Entry만 전송 가능** (비효율적)
+   - 여러 update 메시지 필요(25개 넘으면 여러개로 분할해서 전송필요)
+   - 느린 Convergence time: 전체 동기화 시간 느림
+   - 그래서 소규모 망에 적합
+
+
+### Passive-Interface
+기본적으로 RIP은 활성화된 모든 Interface로 Update를 송,수신하는데, 
+Passive-Interface를 설정하면 Update 정보를 송신하지 않음. 수신만 함.
+해당 인터페이스쪽으로 라우터가 없을 때 사용.
+
+
+### Route Poison과 Poison Reverse
+RIP는 특정 네트워크가 장애 또는 삭제된 것을 인식한 라우터가 인접 라우터에게 metric 16 정보를 광고하여
+더 이상 도달할 수 없는 네트워크 정보를 업데이트하는 데 이를 루트 포이즌이라고 한다.
+
+포이즌 리버스는 루트 포이즌에 대한 응답으로, 다운된 네트워크에 대해서 metric 16 정보를 역으로 광고하는 것을 말한다.
+
+
+### Hop Count Limit (홉 카운트 제한)
+RIP는 네트워크 장애/삭제 및 라우팅 루프가 발생한 경로의 Hop이 16까지 도달하게 되면,
+더 이상 도달이 불가능한 경로이므로 해당 경로를 라우팅 테이블에서 제거한다.
+이 기능을 Hop Count Limit이라고 하며, 이 기능 때문에 RIP가 사용할 수 있는 홉 범위가 15로 제한되어 있는 것이다.
+

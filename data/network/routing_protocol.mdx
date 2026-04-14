@@ -6,23 +6,59 @@ draft: false
 
 <img className="inline" src="/static/images/Network/routing_protocols.png" />
 
-## RIP (Routing Information Protocol)
-- **UDP** 기반 (출발지, 목적지 Port: 520)
-- **RIP이 활성화된 모든 Interface로 약 30초 주기** 로 RIP **FULL-Database** 상호 교환
-   - 실제 25.5~34.5초 주기 (15% random jitter: 30*0.15=4.5초)
-   - (일정시간 간격으로) Routing table 변화가 없더라도 전달함
-   - 변경된 정보가 전달되는데 시간이 느림 (**Slow Convergence Time**)
-   - 그래서 네트워크 Hop수를 최대 15hops로 제한 (즉 16=infinit)
-- **1번에 최대 25개 Entry만 전송 가능** (비효율적)
-   - 여러 update 메시지 필요(25개 넘으면 여러개로 분할해서 전송필요)
-   - 느린 Convergence time: 전체 동기화 시간 느림
-   - 그래서 소규모 망에 적합
+## Distance Vector
+라우터들간에 특정 네트워크까지의 방향과 거리를 교환하는 알고리즘이다.
+RIPv1, RIPv2, IGRP 등이 있다.
 
-## EIGRP (Enhanced Interior Gateway Routing Protocol)
+### auto-summary
+classful 방식의 거리벡터 라우팅 프로토콜에서 네트워크 정보가 광고되어지는 방식이다.
+Classful 방식에서는 Subnetmask를 함께 보내지 않기 때문에 IP 주소의 Network 부분을 클래스로 구분할 수 밖에 없고,
+서브네팅한 네트워크들이 나누기 전의 *major network의 모습으로 자동적으로 합쳐진다고 하여 auto-summary라고 부른다.
+
+* major network 란?  
+클래스 기준으로 정해진 원본 네트워크 (서브넷으로 나누기 전 상태)  
+  - Class A → `/8`
+  - Class B → `/16`
+  - Class C → `/24`
+
+`172.16.1.0/24`, `172.16.2.0/24` 네트워크를 가진 라우터가 라우팅 업데이트를 보낼 때,
+auto-summary가 ON이면 `172.16.0.0/16`으로 묶어서 보낸다.
+```
+실제: 172.16.1.0/24, 172.16.2.0/24
+광고: 172.16.0.0/16
+```
+auto-summary가 OFF이면 클래스 기준으로 묶지 않고 있는 그대로 보낸다.
+```
+광고:
+172.16.1.0/24
+172.16.2.0/24
+```
+
+### 비연속 네트워크에서 auto-summary ON 일 경우
+서브넷 정보가 사라진다.
+```
+[ R1 ] --- 다른 네트워크 --- [ R2 ]
+
+R1: 172.16.1.0/24
+R2: 172.16.2.0/24
+```
+auto-summary ON이면  
+R1 → 172.16.0.0/16 광고  
+R2 → 172.16.0.0/16 광고  
+
+👉 서로 “172.16은 내가 가지고 있어”라고 착각하여 잘못된 경로 선택 발생
+
+auto-summary OFF이면  
+R1 → 172.16.1.0/24  
+R2 → 172.16.2.0/24  
+
+👉 정확하게 구분됨. 정상 라우팅
+
+그래서 auto-summary를 해지한다는 것은, “클래스 기반 → CIDR 기반”으로 바꾸는 것
+
+### Split Horizon
+라우팅 정보를 수신한 인터페이스로 동일한 라우팅 정보를 전송하지 않는 기능이다.
+distance vector routing protocol 환경에서 발생하는 라우팅 루프를 방지하기 위해 사용한다.
 
 
-## OSPF (Open Shortest Path First)
-
-
-## BGP (Border Gateway Protocol)
-
+## Link State

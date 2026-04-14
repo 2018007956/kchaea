@@ -8,6 +8,10 @@ const networkData = [
     href: '/network/subnetting',
   },
   {
+    title: 'Subnet',
+    href: '/network/subnet',
+  },
+  {
     title: 'IP',
     href: '/network/ip',
   },
@@ -70,6 +74,26 @@ const networkData = [
   {
     title: 'RIB / FIB',
     href: '/network/rib-fib',
+  },
+  {
+    title: 'ACL',
+    href: '/network/acl',
+  },
+  {
+    title: 'RIP',
+    href: '/network/rip',
+  },
+  {
+    title: 'EIGRP',
+    href: '/network/eigrp',
+  },
+  {
+    title: 'OSPF',
+    href: null,
+  },
+  {
+    title: 'BGP',
+    href: null,
   },
 ]
 
